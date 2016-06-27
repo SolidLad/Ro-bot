@@ -95,7 +95,7 @@ public class MessageListener extends ListenerAdapter{
             File audioFile;
             HashMap<String , File> hashMap = new HashMap<>();
             String[] sounds = {
-                    "burp","fuck you" , "duwang" , "correct" , "fuk" , "yare yare" , "go on" , "hello" , "hi" , "hold on"
+                    "burp","duwang" , "correct" , "correct" , "fuk" , "yare yare" , "go on" , "hello" , "hi" , "hold on"
                     , "idk" , "fart" , "ha" , "maybe" , "ninja" , "no" , "oh god" , "okay" , "shit" , "stop" , "son of a bitch" , "sup" , "thanks" , "wait one minute" ,
                     "what!" , "yes" , "kono dio da" , "dio" , "its okay" , "oh my" , "thank you" , "believe it"
             };

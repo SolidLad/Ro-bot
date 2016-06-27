@@ -41,15 +41,15 @@ public class CustomPlayer {
             URL trackUrl = new URL(suffix);
             URLConnection con1 = trackUrl.openConnection();
             HttpURLConnection connection1 =(HttpURLConnection) con1;
-            URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url="+suffix+"&client_id=e366fb8542ba5a50154f3a7dceb21c7d").openConnection();
+            URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url="+suffix+"&client_id="+BotMain.client_id).openConnection();
             HttpURLConnection tempCon = (HttpURLConnection) temp;
             String urlString = tempCon.getHeaderField("location");
             System.out.println("["+ LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:"+tempCon.getResponseCode());
             System.out.println("["+ LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Playing SC track " +suffix+" on channel:"+event.getGuild().getVoiceChannels().get(channel-1));
-            audioUrl = new URL("http://api.soundcloud.com/tracks/"+urlString.substring(34,43)+"/stream?client_id=e366fb8542ba5a50154f3a7dceb21c7d");
+            audioUrl = new URL("http://api.soundcloud.com/tracks/"+urlString.substring(34,43)+"/stream?client_id="+BotMain.client_id);
             HttpURLConnection.setFollowRedirects(false);
             URLConnection con2 = audioUrl.openConnection();
-            InputStream in = new URL("http://api.soundcloud.com/tracks/"+urlString.substring(34,43)+"?client_id=e366fb8542ba5a50154f3a7dceb21c7d").openStream();
+            InputStream in = new URL("http://api.soundcloud.com/tracks/"+urlString.substring(34,43)+"?client_id="+BotMain.client_id).openStream();
             int i;
             char c;
             String data = "";
