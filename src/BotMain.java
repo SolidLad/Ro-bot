@@ -8,8 +8,8 @@ public class BotMain {
     {
         try
         {
-            new JDABuilder()
-                    .setBotToken("MTk2MDMyNjY4NzcxNTQ5MTg0.Ck9JJg.7LPEGJ6vZGaBJjfR-byCCOhc7sQ")
+            JDA builder = new JDABuilder()
+                    .setBotToken("MTk2MDMyNjY4NzcxNTQ5MTg0.ClM1-A.q2ysPupnfgBlrslJn2q3DSNsLGk")
                     .addListener(new MessageListener())
                     .buildBlocking();
         }
