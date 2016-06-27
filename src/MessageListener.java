@@ -80,9 +80,6 @@ public class MessageListener extends ListenerAdapter{
             event.getTextChannel().sendMessage(prefix + " A list of commands and their functions has been sent to your private messages.");
             event.getAuthor().getPrivateChannel().sendMessage(commandCodeBlock);
         }
-        if (event.getMessage().getContent().equals("!test")) {
-            event.getTextChannel().sendMessage("```This message is a test.```");
-        }
         if (event.getMessage().getContent().startsWith("!play")) {
             new CustomPlayer(event, urlPlayer, soundTimer).playSound();
         }
