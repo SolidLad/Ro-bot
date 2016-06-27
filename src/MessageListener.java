@@ -148,5 +148,6 @@ public class MessageListener extends ListenerAdapter{
             User user = event.getUser();
             user.getPrivateChannel().sendMessage("Welcome back "+ user.getUsername()+"!");
         }
+        //change
     }
 }
