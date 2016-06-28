@@ -1,6 +1,5 @@
 
 import net.dv8tion.jda.*;
-
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
 import java.io.File;
@@ -52,9 +51,4 @@ public class BotMain {
         }
         return null;
     }
-    //change
-
-
-
-
 }
