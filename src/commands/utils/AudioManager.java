@@ -13,13 +13,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
-
-/**
- * Created by jackbachman on 6/28/16.
- */
 public class AudioManager {
-    ArrayList<Integer> durations = new ArrayList<>();
-    private String sckey = FileIO.readStuff("soundcloudid.txt");
+    private ArrayList<Integer> durations = new ArrayList<>();
+    private String sckey = FileIO.readStuff("stuff.gitignore");
     private Timer soundTimer = new Timer();
 
     public synchronized void addSong(MessageReceivedEvent event, String[] args) {

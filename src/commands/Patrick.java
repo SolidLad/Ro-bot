@@ -18,11 +18,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
-/**
- * Created by jackbachman on 6/27/16.
- * Let me Commit
- */
 public class Patrick implements Command {
     private String[] sounds = {
             "burp", "fuck you", "duwang", "correct", "fuk", "yare yare", "go on", "hello", "hi", "hold on"

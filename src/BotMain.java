@@ -1,4 +1,3 @@
-
 import net.dv8tion.jda.*;
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
@@ -10,7 +9,7 @@ public class BotMain {
     public static String token;
     public static void main(String[] args)
     {
-        token = readStuff("token.txt");
+        token = readStuff("stuff.gitignore");
         try
         {
             new JDABuilder()
