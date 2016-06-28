@@ -1,4 +1,5 @@
 package commands;
+import commands.utils.BotLogger;
 import commands.utils.Command;
 import commands.utils.FileIO;
 import net.dv8tion.jda.audio.player.URLPlayer;
@@ -18,23 +19,24 @@ import java.util.TimerTask;
 public class Play implements Command {
 
     private Timer soundTimer = new Timer();
-    private ArrayList<String> queue = new ArrayList<>();
+    private static ArrayList<String> queue = new ArrayList<>();
     private static int totalLength = 0;
-    private String sckey = FileIO.readStuff("soundcloudid.txt");
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
         String suffix;
         suffix = args[1];
         try {
-            totalLength = totalLength + calcLength(args);
+           totalLength = totalLength + calcLength(args);
+           System.out.println(totalLength);
         } catch (IOException e) {
             e.printStackTrace();
         }
         //add URL to the queue
+        queue.add(suffix);
         if (queue.size()>0)
             playNext(event, args);
-        queue.add(suffix);
+
     }
     private void playNext(MessageReceivedEvent event, String[] args){
         if (args[1]!=null) {
@@ -57,18 +59,19 @@ public class Play implements Command {
                 URL trackUrl = new URL(suffix);
                 URLConnection con1 = trackUrl.openConnection();
                 //open a url to get the location.
-                URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
+                URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + FileIO.readStuff("stuff2.gitignore")).openConnection();
                 HttpURLConnection tempCon = (HttpURLConnection) temp;
                 //get the redirect url.
                 String urlString = tempCon.getHeaderField("location");
-                System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
-                System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1)+" At volume:"+volume);
-                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + sckey);
+                BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","Response code:" + tempCon.getResponseCode(),"[Internal]" );
+                BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Internal]","Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1)+" At volume:"+volume);
+                System.out.println( );
+                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + FileIO.readStuff("stuff2.gitignore"));
                 //manually redirect
                 HttpURLConnection.setFollowRedirects(false);
                 URLConnection con2 = audioUrl.openConnection();
                 //get data from final destination.
-                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + sckey).openStream();
+                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + FileIO.readStuff("stuff2.gitignore")).openStream();
                 int i;
                 char c;
                 String data = "";
@@ -110,7 +113,7 @@ public class Play implements Command {
                 else if (urlPlayer!=null)
                     urlPlayer.restart();
                 else {
-                    System.err.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Error] Invalid URLPlayer.");
+                    BotLogger.logErr("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Severe]","Invalid URLPlayer.");
                     event.getTextChannel().sendMessage("Error: Unable to resolve player.");
                 }
                 soundTimer.schedule(new TimerTask() {
@@ -122,21 +125,20 @@ public class Play implements Command {
                         }
                         else event.getGuild().getAudioManager().closeAudioConnection();
                     }
-                }, length + 1000);
+                }, totalLength + 1000);
 
             }
         }
     }
-
     private int calcLength(String[] args) throws java.io.IOException{
         String suffix = args[1];
         int length;
-        URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
+        URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + FileIO.readStuff("stuff2.gitignore")).openConnection();
         HttpURLConnection tempCon = (HttpURLConnection) temp;
         String urlString = tempCon.getHeaderField("location");
-        System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
+        BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","Response code:" + tempCon.getResponseCode(),"[Internal]" );
         HttpURLConnection.setFollowRedirects(false);
-        InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + sckey).openStream();
+        InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + FileIO.readStuff("stuff2.gitignore")).openStream();
         int i;
         char c;
         String data = "";
@@ -154,5 +156,5 @@ public class Play implements Command {
         length = Integer.parseInt(data.substring(data.indexOf("duration\":") + 10, data.indexOf(",\"commentable\"")));
         return length;
     }
-    //
+
 }
