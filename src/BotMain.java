@@ -15,7 +15,7 @@ public class BotMain {
         token = readStuff("stuff.gitignore");
         try
         {
-            JDA builder = new JDABuilder()
+            new JDABuilder()
                     .setBotToken(token)
                     .addListener(new MessageListener())
                     .buildBlocking();
