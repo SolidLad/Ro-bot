@@ -1,6 +1,7 @@
 package commands.utils;
 
 import net.dv8tion.jda.audio.player.URLPlayer;
+import net.dv8tion.jda.entities.Message;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.*;
 /**
  * Created by jackbachman on 6/28/16.
  */
-public class AudioManager extends Thread {
+public class AudioManager {
     ArrayList<Integer> durations = new ArrayList<>();
     private String sckey = FileIO.readStuff("soundcloudid.txt");
     private Timer soundTimer = new Timer();
@@ -159,5 +160,10 @@ public class AudioManager extends Thread {
         }
         length = Integer.parseInt(data.substring(data.indexOf("duration\":") + 10, data.indexOf(",\"commentable\"")));
         return length;
+    }
+
+    public void stop(MessageReceivedEvent event) {
+        durations.clear();
+        event.getGuild().getAudioManager().closeAudioConnection();
     }
 }
