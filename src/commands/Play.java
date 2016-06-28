@@ -19,6 +19,7 @@ public class Play implements Command {
 
     private Timer soundTimer = new Timer();
     private ArrayList<String> queue = new ArrayList<>();
+    private String clientId = FileIO.readStuff("soundcloudid.txt");
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
@@ -29,6 +30,7 @@ public class Play implements Command {
             playNext(event, args);
         queue.add(suffix);
     }
+
     private void playNext(MessageReceivedEvent event, String[] args){
         if (args[1]!=null) {
             String suffix = args[1];
@@ -50,18 +52,18 @@ public class Play implements Command {
                 URL trackUrl = new URL(suffix);
                 URLConnection con1 = trackUrl.openConnection();
                 //open a url to get the location.
-                URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + FileIO.readStuff("stuff2.gitignore")).openConnection();
+                URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + clientId).openConnection();
                 HttpURLConnection tempCon = (HttpURLConnection) temp;
                 //get the redirect url.
                 String urlString = tempCon.getHeaderField("location");
                 System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
                 System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1)+" At volume:"+volume);
-                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + FileIO.readStuff("stuff2.gitignore"));
+                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + clientId);
                 //manually redirect
                 HttpURLConnection.setFollowRedirects(false);
                 URLConnection con2 = audioUrl.openConnection();
                 //get data from final destination.
-                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + FileIO.readStuff("stuff2.gitignore")).openStream();
+                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + clientId).openStream();
                 int i;
                 char c;
                 String data = "";

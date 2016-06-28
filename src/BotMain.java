@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.util.List;
 public class BotMain {
     public static String token;
-    public static String client_id;
     public static void main(String[] args)
     {
-        client_id = readStuff("stuff2.gitignore");
-        token = readStuff("stuff.gitignore");
+        token = readStuff("token.txt");
         try
         {
             new JDABuilder()

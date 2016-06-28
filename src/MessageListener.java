@@ -1,4 +1,5 @@
 
+import commands.utils.Command;
 import net.dv8tion.jda.OnlineStatus;
 import net.dv8tion.jda.entities.*;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
@@ -15,7 +16,8 @@ public class MessageListener extends ListenerAdapter{
     public void onMessageReceived(MessageReceivedEvent event) {
         //Gets all possible commands and finds the one that you typed, then runs its main method.
         String[] args = getMessage(event).split(" ");
-        commandHandler.commands.get(args[0]).run(event, args);
+        Command cmd = commandHandler.commands.get(args[0]);
+        cmd.run(event, args);
     }
 
     @Override
