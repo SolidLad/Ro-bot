@@ -1,5 +1,4 @@
 package commands;
-
 import commands.utils.Command;
 import commands.utils.FileIO;
 import net.dv8tion.jda.audio.player.URLPlayer;
@@ -8,7 +7,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDateTime;
@@ -18,7 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 public class Play implements Command {
 
-    Timer soundTimer = new Timer();
+    private Timer soundTimer = new Timer();
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
