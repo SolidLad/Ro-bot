@@ -19,11 +19,18 @@ public class Play implements Command {
 
     private Timer soundTimer = new Timer();
     private ArrayList<String> queue = new ArrayList<>();
+    private static int totalLength = 0;
+    private String sckey = FileIO.readStuff("soundcloudid.txt");
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
         String suffix;
         suffix = args[1];
+        try {
+            totalLength = totalLength + calcLength(args);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //add URL to the queue
         if (queue.size()>0)
             playNext(event, args);
@@ -50,18 +57,18 @@ public class Play implements Command {
                 URL trackUrl = new URL(suffix);
                 URLConnection con1 = trackUrl.openConnection();
                 //open a url to get the location.
-                URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + FileIO.readStuff("stuff2.gitignore")).openConnection();
+                URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
                 HttpURLConnection tempCon = (HttpURLConnection) temp;
                 //get the redirect url.
                 String urlString = tempCon.getHeaderField("location");
                 System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
                 System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1)+" At volume:"+volume);
-                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + FileIO.readStuff("stuff2.gitignore"));
+                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + sckey);
                 //manually redirect
                 HttpURLConnection.setFollowRedirects(false);
                 URLConnection con2 = audioUrl.openConnection();
                 //get data from final destination.
-                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + FileIO.readStuff("stuff2.gitignore")).openStream();
+                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + sckey).openStream();
                 int i;
                 char c;
                 String data = "";
@@ -116,7 +123,36 @@ public class Play implements Command {
                         else event.getGuild().getAudioManager().closeAudioConnection();
                     }
                 }, length + 1000);
+
             }
         }
     }
+
+    private int calcLength(String[] args) throws java.io.IOException{
+        String suffix = args[1];
+        int length;
+        URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
+        HttpURLConnection tempCon = (HttpURLConnection) temp;
+        String urlString = tempCon.getHeaderField("location");
+        System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
+        HttpURLConnection.setFollowRedirects(false);
+        InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + sckey).openStream();
+        int i;
+        char c;
+        String data = "";
+        try {
+            while ((i = in.read()) != -1) {
+                c = (char) i;
+                data = data + String.valueOf(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null)
+                in.close();
+        }
+        length = Integer.parseInt(data.substring(data.indexOf("duration\":") + 10, data.indexOf(",\"commentable\"")));
+        return length;
+    }
+    //
 }
