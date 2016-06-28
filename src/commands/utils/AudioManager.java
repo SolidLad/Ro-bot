@@ -15,7 +15,7 @@ import java.time.format.FormatStyle;
 import java.util.*;
 public class AudioManager {
     private ArrayList<Integer> durations = new ArrayList<>();
-    private String sckey = FileIO.readStuff("stuff.gitignore");
+    private String sckey = FileIO.readStuff("stuff2.gitignore");
     private Timer soundTimer = new Timer();
 
     public synchronized void addSong(MessageReceivedEvent event, String[] args) {
@@ -77,12 +77,12 @@ public class AudioManager {
                 String urlString = tempCon.getHeaderField("location");
                 System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
                 System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1)+" At volume:"+volume);
-                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + sckey);
+                audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "/stream?client_id=" + sckey);
                 //manually redirect
                 HttpURLConnection.setFollowRedirects(false);
                 URLConnection con2 = audioUrl.openConnection();
                 //get data from final destination.
-                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + sckey).openStream();
+                InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "?client_id=" + sckey).openStream();
                 int i;
                 char c;
                 String data = "";
@@ -111,7 +111,6 @@ public class AudioManager {
                 ((HttpURLConnection) con2).disconnect();
 
             } catch (UnsupportedAudioFileException | IOException e) {
-                event.getTextChannel().sendMessage("Error: printing stacktrace: ```"+e.getMessage()+"```");
                 e.printStackTrace();
             }
             if (audioUrl != null) {
@@ -139,7 +138,7 @@ public class AudioManager {
         String urlString = tempCon.getHeaderField("location");
         System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
         HttpURLConnection.setFollowRedirects(false);
-        InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "?client_id=" + sckey).openStream();
+        InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "?client_id=" + sckey).openStream();
         int i;
         char c;
         String data = "";
