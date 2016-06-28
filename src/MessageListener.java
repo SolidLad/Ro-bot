@@ -5,6 +5,9 @@ import net.dv8tion.jda.entities.*;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.user.UserOnlineStatusUpdateEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
+
+import java.util.logging.Logger;
+
 public class MessageListener extends ListenerAdapter{
     private final CommandHandler commandHandler = new CommandHandler();
 
