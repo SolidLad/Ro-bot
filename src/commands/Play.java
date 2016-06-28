@@ -12,27 +12,48 @@ import java.net.URLConnection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 public class Play implements Command {
 
-    private Timer soundTimer = new Timer();
-
+    private final Timer soundTimer = new Timer();
+    private static ArrayList<String> queue = new ArrayList<>();
+    private int length;
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
         String suffix;
-        float volume;
-        if (args.length>3) {
-            volume = Float.valueOf(args[3]);
-        }
-        else volume = 1f;
         suffix = args[1];
+        //add it to the queue
+        queue.add(args[1]);
+        if (queue.size() < 2) {
+            playSound(args,event,suffix);
+        }
+        else queueSong(length, queue.remove(0), event, args);
+
+    }
+    private void queueSong(int length, String queuedSound, MessageReceivedEvent event, String[] args){
+        soundTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                playSound(args, event, queuedSound);
+                System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Queueing SC track: " + queuedSound);
+
+            }
+        }, length + 2000);
+    }
+    private void playSound(String[] args, MessageReceivedEvent event, String suffix){
+        event.getTextChannel().sendMessage("Now playing: "+suffix);
+        float volume;
+        if (args.length > 3) {
+            volume = Float.valueOf(args[3]);
+        } else volume = 1f;
         URL audioUrl = null;
         URLPlayer urlPlayer = null;
         //default value in case duration cant be retrieved.
-        int length = 300000;
+        length = 300000;
         int channel;
-        if (args.length<3)
+        if (args.length < 3)
             //if channel not specified, play in general
             channel = 1;
         else channel = Integer.parseInt(args[2]);
@@ -45,7 +66,7 @@ public class Play implements Command {
             //get the redirect url.
             String urlString = tempCon.getHeaderField("location");
             System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Response code:" + tempCon.getResponseCode());
-            System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1)+" At volume:"+volume);
+            System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Internal] Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1) + " At volume:" + volume);
             audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, 43) + "/stream?client_id=" + FileIO.readStuff("stuff2.gitignore"));
             //manually redirect
             HttpURLConnection.setFollowRedirects(false);
@@ -71,7 +92,7 @@ public class Play implements Command {
             //actually get the location of the audio stream.
             audioUrl = new URL(con2.getHeaderField("Location"));
             //create the player
-            urlPlayer = new URLPlayer(event.getJDA(), audioUrl, 4718592);
+            urlPlayer = new URLPlayer(event.getJDA(), audioUrl);
             //set the volume;
             urlPlayer.setVolume(volume);
             //disconnect.
@@ -80,15 +101,15 @@ public class Play implements Command {
             ((HttpURLConnection) con2).disconnect();
 
         } catch (UnsupportedAudioFileException | IOException e) {
-            event.getTextChannel().sendMessage("Error: printing stacktrace: ```"+e.getMessage()+"```");
+            event.getTextChannel().sendMessage("Error: printing stacktrace: ```" + e.getMessage() + "```");
             e.printStackTrace();
         }
         if (audioUrl != null) {
             event.getGuild().getAudioManager().setSendingHandler(urlPlayer);
             event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceChannels().get(channel - 1));
-            if (urlPlayer!=null&&!urlPlayer.isStopped())
+            if (urlPlayer != null && !urlPlayer.isStopped())
                 urlPlayer.play();
-            else if (urlPlayer!=null)
+            else if (urlPlayer != null)
                 urlPlayer.restart();
             else {
                 System.out.println("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "][Error] Invalid URLPlayer. Was urlPlayer initialized?");
