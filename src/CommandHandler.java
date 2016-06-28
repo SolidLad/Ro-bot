@@ -1,13 +1,8 @@
 import commands.utils.Command;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-/**
- * Created by jackbachman on 6/27/16.
- */
 public class CommandHandler {
 
     private String commandFolderPath = "src/commands";

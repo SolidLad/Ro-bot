@@ -3,10 +3,6 @@ package commands.utils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-/**
- * Created by jackbachman on 6/27/16.
- */
 public class FileIO {
     public static String readStuff(String fileName){
         try {
