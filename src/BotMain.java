@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-
 public class BotMain {
     public static String token;
     public static String client_id;
