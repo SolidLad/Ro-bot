@@ -17,7 +17,9 @@ public class MessageListener extends ListenerAdapter{
         //Gets all possible commands and finds the one that you typed, then runs its main method.
         String[] args = getMessage(event).split(" ");
         Command cmd = commandHandler.commands.get(args[0]);
-        cmd.run(event, args);
+        if(cmd != null) {
+            cmd.run(event, args);
+        }
     }
 
     @Override
