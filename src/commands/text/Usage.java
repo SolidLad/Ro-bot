@@ -28,4 +28,4 @@ public class Usage implements Command{
         else event.getTextChannel().sendMessage("Command not recognized. Please enter commands in all lowercase letters.");
 
     }
-}
+}//
