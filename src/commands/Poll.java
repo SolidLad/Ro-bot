@@ -8,7 +8,7 @@ import org.apache.http.impl.client.HttpClientBuilder;;
 import org.json.JSONObject;
 
 public class Poll implements Command {
-    private int id = 1;
+    private int id;
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
         try {
@@ -16,8 +16,8 @@ public class Poll implements Command {
 
             try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
                 HttpPost request = new HttpPost("https://strawpoll.me/api/v2/polls");
-                StringEntity params = new StringEntity(json.toString());
                 request.addHeader("Content-Type", "application/json");
+                StringEntity params = new StringEntity(json.toString());
                 request.setEntity(params);
                 JSONObject response = new JSONObject(httpClient.execute(request));
                 id = response.getInt("id");
@@ -39,7 +39,6 @@ public class Poll implements Command {
             obj.accumulate("options", args[i]);
         }
         obj.put("multi", false);
-        System.out.println(obj);
         return obj;
     }
 }
