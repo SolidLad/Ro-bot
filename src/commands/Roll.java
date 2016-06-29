@@ -23,4 +23,5 @@ public class Roll implements Command {
         else event.getTextChannel().sendMessage("Invalid number of arguments. Try ```!usage roll``` for more information on the ```!roll``` command.");
 
     }
+    //
 }
