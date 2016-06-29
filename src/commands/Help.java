@@ -9,7 +9,7 @@ import net.dv8tion.jda.events.message.MessageReceivedEvent;
  */
 public class Help implements Command {
 
-    private final String commandCodeBlock = "````!ban\n!deafen\n!dream\n!help\n!kick\n!mute\n!patrick\n!play\n!poll\n!roll\n!say\n!stop\n!unban\n!undeafen\n!unmute\n!usage\n" +
+    private final String commandCodeBlock = "```!ban\n!deafen\n!dream\n!help\n!kick\n!mute\n!patrick\n!play\n!poll\n!roll\n!say\n!stop\n!unban\n!undeafen\n!unmute\n!usage\n" +
             "!users\n```";
 
     @Override
