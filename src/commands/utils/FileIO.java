@@ -1,24 +1,28 @@
 package commands.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 public class FileIO {
-    public static String readStuff(String fileName){
+    public static String readFile(String fileName){
+        String contents = "";
         try {
             File file = new File(fileName);
-            FileReader fileReader = new FileReader(file);
-            StringBuffer stringBuffer = new StringBuffer();
-            int numCharsRead;
-            char[] charArray = new char[1024];
-            while ((numCharsRead = fileReader.read(charArray)) > 0) {
-                stringBuffer.append(charArray, 0, numCharsRead);
+            if(!file.exists()) {
+                return contents;
             }
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while((line = bufferedReader.readLine()) != null) {
+                contents += line + "\n";
+            }
+            bufferedReader.close();
             fileReader.close();
-            return stringBuffer.toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return contents;
     }
 }
