@@ -13,6 +13,6 @@ public class Users implements Command {
                 ) {
             msg = msg + "Username: " + aUser.getUsername() + " | Online Status: " + aUser.getOnlineStatus().toString() + "\n";
         }
-        event.getChannel().sendMessage("\n[" + msg + "]");
+        event.getChannel().sendMessage("\n```" + msg + "```");
     }
 }

@@ -11,7 +11,7 @@ public class Usage implements Command{
     private String[] commands = {"ban","deafen","dream","help","kick","mute","patrick","play","roll","say","stop","unban","undeafen","unmute","usage","users"};
     private String[] descriptions = {"Bans a user. ```Usage !ban <Username> <Days>```","Deafens a user. Usage: ```!deafen <Username>```",
             "Links a youtube video. Usage: ```!dream```", "Displays a list of commands Usage: ```!help```","Kicks a user. Usage: ```!kick <Username>```","Mutes a user. Usage: ```!mute <Username>```",
-            "Plays one of patrick's sounds. Usage: ```!patrick <Sound>```","Plays a soundcloud track. Usage: ```!play <Track URL>```",
+            "Plays one of patrick's sounds. Usage: ```!patrick <Sound>```","Plays a soundcloud track. Usage: ```!play <Track URL> <int Channel> <Float volume>```",
             "Rolls a six sided die. Usage: ```!roll```", "Makes the bot say something. Usage: ```!say <Message>```","Stops the currently play track and clears the queue.  Usage: ```!stop```",
             "Unbans a user. Usage: ```!unban <Username>```", "Undeafens a user. Usage: ```!undeafen <Username>```", "Unmutes a user. Usage: ```!unmute <Username>```",
             "Displays a command description and usage. Usage: ```!usage <Command>```", "Prints a list of users and their online statuses. Usage: ```!users```"
