@@ -9,7 +9,7 @@ import java.util.Map;
 public class Usage implements Command{
     private Map<String, String> commandDescriptions = new HashMap<>();
     private String[] commands = {"ban","deafen","dream","help","kick","mute","patrick","play","poll","roll","say","stop","unban","undeafen","unmute","usage","users"};
-    private String[] descriptions = {"Bans a user. ```Usage !ban <Username> <Days>```","Deafens a user. Usage: ```!deafen <Username>```",
+    private String[] descriptions = {"Bans a user. Usage: ```!ban <Username> <Days>```","Deafens a user. Usage: ```!deafen <Username>```",
             "Links a youtube video. Usage: ```!dream```", "Displays a list of commands Usage: ```!help```","Kicks a user. Usage: ```!kick <Username>```","Mutes a user. Usage: ```!mute <Username>```",
             "Plays one of patrick's sounds. Usage: ```!patrick <Sound>```","Plays a soundcloud track. Usage: ```!play <Track URL> <int Channel> <Float volume>```",
             "Creates a poll with up to twenty options. Usage: ```!poll <Title>  <Option1> <Option2> <Option3> etc.","Rolls a six sided die. Usage: ```!roll```", "Makes the bot say something. Usage: ```!say <Message>```","Stops the currently play track and clears the queue.  Usage: ```!stop```",
