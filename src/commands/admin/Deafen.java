@@ -1,4 +1,4 @@
-package commands;
+package commands.admin;
 
 import commands.utils.Command;
 import net.dv8tion.jda.entities.Role;
@@ -8,9 +8,10 @@ import net.dv8tion.jda.managers.GuildManager;
 
 import java.util.List;
 
-public class Mute implements Command {
+public class Deafen implements Command{
     @Override
-    public void run(MessageReceivedEvent event, String[] args) {GuildManager gm = new GuildManager(event.getGuild());
+    public void run(MessageReceivedEvent event, String[] args) {
+        GuildManager gm = new GuildManager(event.getGuild());
         List<User> users = event.getGuild().getUsers();
         User target = null;
         String targetName = "";
@@ -28,7 +29,7 @@ public class Mute implements Command {
         }
         List<Role> authorRoles = event.getGuild().getRolesForUser(event.getAuthor());
         if (target!=null&&authorRoles.contains(event.getGuild().getRoleById("194965592774541322"))) {
-            gm.mute(target);
+            gm.deafen(target);
         }
     }
 }

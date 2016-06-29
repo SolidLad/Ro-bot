@@ -1,4 +1,4 @@
-package commands;
+package commands.text;
 
 import commands.utils.Command;
 import net.dv8tion.jda.entities.User;
