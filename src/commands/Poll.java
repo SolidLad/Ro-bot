@@ -1,7 +1,6 @@
 package commands;
 import commands.utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -16,9 +15,9 @@ public class Poll implements Command {
             JSONObject json = jsonEncode(args);
 
             try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-                HttpPost request = new HttpPost("http://strawpoll.me/api/v2/polls");
+                HttpPost request = new HttpPost("https://strawpoll.me/api/v2/polls");
                 StringEntity params = new StringEntity(json.toString());
-                request.addHeader("content-type", "application/json");
+                request.addHeader("Content-Type", "application/json");
                 request.setEntity(params);
                 JSONObject response = new JSONObject(httpClient.execute(request));
                 id = response.getInt("id");
@@ -37,7 +36,7 @@ public class Poll implements Command {
         JSONObject obj = new JSONObject();
         obj.put("title", args[1]);
         for (int i = 2; i < args.length; i++) {
-            obj.append("options", args[i]);
+            obj.accumulate("options", args[i]);
         }
         obj.put("multi", false);
         System.out.println(obj);
