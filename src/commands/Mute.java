@@ -20,7 +20,7 @@ public class Mute implements Command {
                 target = aUser;
         }
         List<Role> authorRoles = event.getGuild().getRolesForUser(event.getAuthor());
-        if (target!=null&&authorRoles.contains(event.getGuild().getRoleById("Admin"))) {
+        if (target!=null){//&&authorRoles.contains(event.getGuild().getRoleById("Admin"))) {
             gm.mute(target);
         }
     }

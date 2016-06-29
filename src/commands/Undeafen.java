@@ -20,7 +20,7 @@ public class Undeafen implements Command{
                 target = aUser;
         }
         List<Role> authorRoles = event.getGuild().getRolesForUser(event.getAuthor());
-        if (target!=null&&authorRoles.contains(event.getGuild().getRoleById("Admin"))) {
+        if (target!=null){//&&authorRoles.contains(event.getGuild().getRoleById("Admin"))) {
             gm.undeafen(target);
         }
     }
