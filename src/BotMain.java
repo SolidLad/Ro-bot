@@ -9,7 +9,7 @@ public class BotMain {
     public static String token;
     public static void main(String[] args)
     {
-        token = readStuff("stuff.gitignore");
+        token = readStuff("token.txt");
         try
         {
             new JDABuilder()

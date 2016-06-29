@@ -1,7 +1,6 @@
 package commands.utils;
 
 import net.dv8tion.jda.audio.player.URLPlayer;
-import net.dv8tion.jda.entities.Message;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.time.format.FormatStyle;
 import java.util.*;
 public class AudioManager {
     private ArrayList<Integer> durations = new ArrayList<>();
-    private String sckey = FileIO.readStuff("stuff2.gitignore");
+    private String sckey = FileIO.readStuff("soundcloudid.txt");
     private Timer soundTimer = new Timer();
 
     public synchronized void addSong(MessageReceivedEvent event, String[] args) {

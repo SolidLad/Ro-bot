@@ -1,7 +1,12 @@
-package commands;
+package commands.text;
 
+import com.sun.corba.se.impl.activation.CommandHandler;
+import com.sun.corba.se.impl.util.PackagePrefixChecker;
 import commands.utils.Command;
+import commands.utils.ServerPackage;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+
+import java.util.Set;
 
 /**
  * Created by jackbachman on 6/27/16.
@@ -14,9 +19,11 @@ public class Help implements Command {
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
-        String prefix;
-        prefix = event.getAuthor().getAsMention();
-        event.getTextChannel().sendMessage(prefix + " A list of commands and their functions has been sent to your private messages.");
-        event.getAuthor().getPrivateChannel().sendMessage(commandCodeBlock);
+        Set keys = ServerPackage.commands.keySet();
+        String commands = "";
+        for(Object key: keys) {
+            commands += key.toString() + "\n";
+        }
+        event.getTextChannel().sendMessage(commands);
     }
 }

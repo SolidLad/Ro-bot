@@ -1,4 +1,4 @@
-package commands;
+package commands.audio;
 
 import commands.utils.BotLogger;
 import commands.utils.Command;

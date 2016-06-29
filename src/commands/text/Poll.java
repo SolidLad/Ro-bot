@@ -1,6 +1,7 @@
-package commands;
+package commands.text;
 import commands.utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -8,23 +9,25 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
+
 public class Poll implements Command {
     private int id;
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
         try {
             JSONObject json = jsonEncode(args);
-
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
                 HttpPost request = new HttpPost("https://strawpoll.me/api/v2/polls");
+                request.addHeader("Content-Type", "application/json");
                 StringEntity params = new StringEntity(json.toString(), ContentType.APPLICATION_JSON);
                 request.setEntity(params);
                 JSONObject response = new JSONObject(httpClient.execute(request));
+                System.out.println("RESPONSE: " + response.toString());
                 id = response.getInt("id");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,7 +42,7 @@ public class Poll implements Command {
             obj.accumulate("options", args[i]);
         }
         obj.put("multi", false);
-        obj.put("dupcheck","normal");
+        obj.put("dupcheck", "normal");
         obj.put("captcha", false);
         return obj;
     }
