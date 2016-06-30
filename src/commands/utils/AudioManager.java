@@ -14,7 +14,7 @@ import java.time.format.FormatStyle;
 import java.util.*;
 public class AudioManager {
     private ArrayList<Integer> durations = new ArrayList<>();
-    private String sckey = FileIO.readStuff("soundcloudid.txt");
+    private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
 
     public synchronized void addSong(MessageReceivedEvent event, String[] args) {

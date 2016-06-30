@@ -19,6 +19,7 @@ public class Help implements Command {
             commands += key.toString() + "\n";
         }
         commands += "```";
-        event.getAuthor().getPrivateChannel().sendMessage(commands);
+        event.getAuthor().getPrivateChannel().sendMessage(commands+"\nThank you for using Ro-bot!\nUse !info to get more information about Ro-bot.\n" +
+                "If you enjoy Ro-bot, please consider donating here <link goes here>.\nRo-bot is open source. The source code can be found here https://github.com/SolidLad/Ro-bot.");
     }
 }

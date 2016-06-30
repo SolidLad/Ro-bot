@@ -1,15 +1,11 @@
 package commands.text;
 import commands.utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
-
-import java.net.HttpURLConnection;
 
 public class Poll implements Command {
     private int id;
@@ -18,9 +14,9 @@ public class Poll implements Command {
         try {
             JSONObject json = jsonEncode(args);
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                HttpPost request = new HttpPost("https://strawpoll.me/api/v2/polls");
-                request.addHeader("Content-Type", "application/json");
-                StringEntity params = new StringEntity(json.toString(), ContentType.APPLICATION_JSON);
+                HttpPost request = new HttpPost("https://strawpoll.me/api/v2/");
+                StringEntity params = new StringEntity("https://strawpoll.me/api/v2/polls\n"+json.toString(), "UTF-8");
+                params.setContentType("application/json");
                 request.setEntity(params);
                 JSONObject response = new JSONObject(httpClient.execute(request));
                 System.out.println("RESPONSE: " + response.toString());

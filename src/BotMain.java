@@ -10,7 +10,7 @@ public class BotMain {
     public static String token;
     public static void main(String[] args)
     {
-        token = FileIO.readFile("token.txt");
+        token = FileIO.readFile("stuff.gitignore");
         try
         {
             new JDABuilder()
