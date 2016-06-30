@@ -74,7 +74,7 @@ public class AudioManager {
                 HttpURLConnection tempCon = (HttpURLConnection) temp;
                 //get the redirect url.
                 String urlString = tempCon.getHeaderField("location");
-                BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Internal]"," Response code:" + tempCon.getResponseCode());
+                BotLogger.log(BotLogger.mediumTimestamp,"[Internal]"," Response code:" + tempCon.getResponseCode());
                 audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "/stream?client_id=" + sckey);
                 //manually redirect
                 HttpURLConnection.setFollowRedirects(false);
@@ -123,7 +123,7 @@ public class AudioManager {
                 else if (urlPlayer!=null)
                     urlPlayer.restart();
                 else {
-                    BotLogger.logErr("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Severe]","Invalid URLPlayer.");
+                    BotLogger.logErr(BotLogger.mediumTimestamp,BotLogger.ERROR,"Invalid URLPlayer.");
                     event.getTextChannel().sendMessage("Error: Unable to resolve player.");
                 }
             }
@@ -136,7 +136,7 @@ public class AudioManager {
         URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
         HttpURLConnection tempCon = (HttpURLConnection) temp;
         String urlString = tempCon.getHeaderField("location");
-        BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Internal]"," Response code:" + tempCon.getResponseCode());
+        BotLogger.log(BotLogger.mediumTimestamp,BotLogger.INTERNAL," Response code:" + tempCon.getResponseCode());
         HttpURLConnection.setFollowRedirects(false);
         InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "?client_id=" + sckey).openStream();
         int i;

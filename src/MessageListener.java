@@ -1,3 +1,4 @@
+import commands.utils.BotLogger;
 import commands.utils.Command;
 import net.dv8tion.jda.OnlineStatus;
 import net.dv8tion.jda.entities.*;
@@ -14,6 +15,8 @@ public class MessageListener extends ListenerAdapter{
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        //Log message
+        BotLogger.log(BotLogger.mediumTimestamp, BotLogger.LOGGING, "["+event.getMessage().getContent()+"]");
         //Gets all possible commands and finds the one that you typed, then runs its main method.
         String[] args = getMessage(event).split(" ");
         Command cmd = commandHandler.commands.get(args[0]);

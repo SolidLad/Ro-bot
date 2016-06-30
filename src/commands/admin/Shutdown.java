@@ -17,7 +17,7 @@ public class Shutdown implements Command {
             if (key.equals(FileIO.readFile("stuff3.gitignore")))
                 event.getJDA().shutdown();
         }
-        BotLogger.logErr("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]", "[DANGER]", "User: " + event.getAuthor() + "From guild: " + event.getGuild() + " Attempted to shut down the system with invalid access keycode.");
+        BotLogger.logErr(BotLogger.mediumTimestamp, BotLogger.DANGER, "User: " + event.getAuthor() + "From guild: " + event.getGuild() + " Attempted to shut down the system with invalid access keycode.");
 
     }
 }
