@@ -16,6 +16,7 @@ public class AudioManager {
     private ArrayList<Integer> durations = new ArrayList<>();
     private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
+    private static URLPlayer urlPlayer;
 
     public synchronized void addSong(MessageReceivedEvent event, String[] args) {
         //If no song play the current song
@@ -52,20 +53,9 @@ public class AudioManager {
     private void playNext(MessageReceivedEvent event, String[] args){
         if (args[1]!=null) {
             String suffix = args[1];
-            float volume;
-            if (args.length>3) {
-                volume = Float.valueOf(args[3]);
-            }
-            else volume = 1f;
             URL audioUrl = null;
-            URLPlayer urlPlayer = null;
             //default value in case duration cant be retrieved.
             int length = 300000;
-            int channel;
-            if (args.length<3)
-                //if channel not specified, play in general
-                channel = 1;
-            else channel = Integer.parseInt(args[2]);
             try {
                 URL trackUrl = new URL(suffix);
                 URLConnection con1 = trackUrl.openConnection();
@@ -101,8 +91,6 @@ public class AudioManager {
                 audioUrl = new URL(con2.getHeaderField("Location"));
                 //create the player
                 urlPlayer = new URLPlayer(event.getJDA(), audioUrl);
-                //set the volume;
-                urlPlayer.setVolume(volume);
                 //disconnect.
                 ((HttpURLConnection) con1).disconnect();
                 ((HttpURLConnection) temp).disconnect();
@@ -115,10 +103,11 @@ public class AudioManager {
                 event.getGuild().getAudioManager().setSendingHandler(urlPlayer);
                 //if we're not connnected, connect.
                 if (!event.getGuild().getAudioManager().isConnected())
-                    event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceChannels().get(channel - 1));
+                    //connect to the authors currently connected channel
+                    event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
                 if (urlPlayer!=null&&!urlPlayer.isStopped()) {
                     urlPlayer.play();
-                    BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Internal]"," Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceChannels().get(channel - 1)+" At volume:"+volume);
+                    BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Internal]"," Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
                 }
                 else if (urlPlayer!=null)
                     urlPlayer.restart();
@@ -160,5 +149,9 @@ public class AudioManager {
     public void stop(MessageReceivedEvent event) {
         durations.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
+    }
+
+    public static URLPlayer getUrlPlayer() {
+        return urlPlayer;
     }
 }

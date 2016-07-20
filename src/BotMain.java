@@ -16,6 +16,7 @@ public class BotMain {
             new JDABuilder()
                     .setBotToken(token.replaceAll("\n", ""))
                     .addListener(new MessageListener())
+                    .setBulkDeleteSplittingEnabled(false)
                     .buildBlocking();
         }
         catch (IllegalArgumentException e)

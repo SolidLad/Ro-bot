@@ -14,8 +14,8 @@ public class Poll implements Command {
         try {
             JSONObject json = jsonEncode(args);
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                HttpPost request = new HttpPost("https://strawpoll.me/api/v2/");
-                StringEntity params = new StringEntity("https://strawpoll.me/api/v2/polls\n"+json.toString(), "UTF-8");
+                HttpPost request = new HttpPost("https://strawpoll.me/api/v2/polls/");
+                StringEntity params = new StringEntity(json.toString(), "UTF-8");
                 params.setContentType("application/json");
                 request.setEntity(params);
                 JSONObject response = new JSONObject(httpClient.execute(request));
@@ -26,9 +26,8 @@ public class Poll implements Command {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
-            event.getTextChannel().sendMessage("Poll is up at https://www.strawpoll.me/"+id);
+        } finally {
+            event.getTextChannel().sendMessage("Poll is up at https://www.strawpoll.me/" + id);
         }
     }
     private JSONObject jsonEncode(String[] args){
@@ -40,6 +39,7 @@ public class Poll implements Command {
         obj.put("multi", false);
         obj.put("dupcheck", "normal");
         obj.put("captcha", false);
+        System.out.println(obj);
         return obj;
     }
 }

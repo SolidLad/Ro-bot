@@ -10,9 +10,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/JDA-withDependencies-2.1.1_300.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/JDA-withDependencies-2.2.0_334.jar!/" />
         </CLASSES>
-        <JAVADOC />
+        <JAVADOC>
+          <root url="jar://$USER_HOME$/Downloads/JDA-2.2.0_334-javadoc.jar!/" />
+        </JAVADOC>
         <SOURCES />
       </library>
     </orderEntry>

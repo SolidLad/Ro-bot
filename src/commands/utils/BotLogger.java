@@ -12,9 +12,13 @@ public class BotLogger {
     public static final String INTERNAL = " [Internal] ";
     public static final String INFO = " [Info] ";
     public static void log(String timeStamp, String type,String msg){
+        mediumTimestamp =  "[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]";
+        timeStamp = mediumTimestamp;
         System.out.println(timeStamp+" "+type+" "+msg);
     }
     public static void logErr(String timeStamp, String lvl, String msg){
+        mediumTimestamp =  "[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]";
+        timeStamp = mediumTimestamp;
         System.err.println(timeStamp+" "+lvl+" "+msg);
     }
 }
