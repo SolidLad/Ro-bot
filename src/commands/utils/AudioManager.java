@@ -12,46 +12,93 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
-public class AudioManager {
+
+public class AudioManager
+{
     private ArrayList<Integer> durations = new ArrayList<>();
     private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
     private static URLPlayer urlPlayer;
 
-    public synchronized void addSong(MessageReceivedEvent event, String[] args) {
+    /*
+    ****NOTE TO JACK****
+    *
+    * The queing is almost done.
+    * It only has a problem with adding the value of the current playing song (durations.get(0)) because we don't know the current time in the song, so we can''t
+    * just grab durations.get(0) because the song has already started
+    *
+    *
+    * You need to figure out how to keep track of the currently playing song so we can add it in the marked spot below, in order to prevent a song from
+    * being turned off prematurely
+    *
+    * Once you do this, sound queing is complete
+    *
+    *
+    * John
+    *
+
+      */
+
+    public synchronized void addSong(MessageReceivedEvent event, String[] args)
+    {
+        long totalTime = 0;
         //If no song play the current song
-        if (durations.size() == 0) {
+        if (durations.size() == 0)
+        {
             playNext(event, args);
-            try {
+            try
+            {
                 durations.add(calcLength(args));
-            } catch (IOException e) {
-                e.printStackTrace();
+                totalTime += durations.get(0);
             }
-        } else {
-            long totalTime = 0;
-            for(int i = 0; i < durations.size(); i++) {
-                totalTime += durations.get(i);
-            }
-            soundTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    //this closes the queue if one sound is left
-                    playNext(event, args);
-                    durations.remove(0);
-                    if(durations.size() == 0) {
-                        event.getGuild().getAudioManager().closeAudioConnection();
-                    }
-                }
-            }, totalTime);
-            try {
-                durations.add(calcLength(args));
-            } catch (IOException e) {
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
+
+        else
+        {
+            try
+            {
+                //TODO: PUT IN THE CURRENT TIME LEFT IN THE SONG THAT IS PLAYING HERE!!!!!!!
+
+                //totalTime = INSERTVAL
+
+                for (int i = 1; i < durations.size(); i++)
+                {
+                    totalTime += durations.get(i);
+                }
+
+                durations.add(calcLength(args));
+                totalTime += durations.get(durations.size()-1);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        soundTimer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                //this closes the queue if one sound is left
+                durations.remove(0);
+                if(durations.size() == 0)
+                {
+                    event.getGuild().getAudioManager().closeAudioConnection();
+                }
+                playNext(event, args);
+            }
+        }, totalTime);
+
+
     }
 
-    private void playNext(MessageReceivedEvent event, String[] args){
+    private void playNext(MessageReceivedEvent event, String[] args)
+    {
         if (args[1]!=null) {
             String suffix = args[1];
             URL audioUrl = null;
@@ -116,7 +163,8 @@ public class AudioManager {
         }
     }
 
-    private int calcLength(String[] args) throws java.io.IOException{
+    private int calcLength(String[] args) throws java.io.IOException
+    {
         String suffix = args[1];
         int length;
         URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
@@ -143,12 +191,15 @@ public class AudioManager {
         return length;
     }
 
-    public void stop(MessageReceivedEvent event) {
+    public void stop(MessageReceivedEvent event) 
+    {
         durations.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
     }
 
-    public static URLPlayer getUrlPlayer() {
+
+    public static URLPlayer getUrlPlayer() 
+    {
         return urlPlayer;
     }
 }
