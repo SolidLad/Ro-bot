@@ -35,6 +35,7 @@ public class AudioManager {
             soundTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
+                    //this closes the queue if one sound is left
                     playNext(event, args);
                     durations.remove(0);
                     if(durations.size() == 0) {
@@ -54,8 +55,6 @@ public class AudioManager {
         if (args[1]!=null) {
             String suffix = args[1];
             URL audioUrl = null;
-            //default value in case duration cant be retrieved.
-            int length = 300000;
             try {
                 URL trackUrl = new URL(suffix);
                 URLConnection con1 = trackUrl.openConnection();
@@ -85,8 +84,6 @@ public class AudioManager {
                     if (in != null)
                         in.close();
                 }
-                //get the length in milliseconds for later.
-                length = Integer.parseInt(data.substring(data.indexOf("duration\":") + 10, data.indexOf(",\"commentable\"")));
                 //actually get the location of the audio stream.
                 audioUrl = new URL(con2.getHeaderField("Location"));
                 //create the player

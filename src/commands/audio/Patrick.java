@@ -53,8 +53,7 @@ public class Patrick implements Command {
                     player = new FilePlayer(audioFile);
                     event.getGuild().getAudioManager().setSendingHandler(player);
                     if (!event.getGuild().getAudioManager().isConnected()) {
-                        if (!event.getGuild().getAudioManager().isConnected())
-                            event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
+                        event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
                         if (player!=null&&!player.isStopped())
                             player.play();
                         else if (player!=null)
