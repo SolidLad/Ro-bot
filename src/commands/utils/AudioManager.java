@@ -18,7 +18,7 @@ public class AudioManager
     private ArrayList<Integer> durations = new ArrayList<>();
     private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
-    private static URLPlayer urlPlayer;
+    public  URLPlayer urlPlayer;
 
     /*
     ****NOTE TO JACK****
@@ -195,11 +195,5 @@ public class AudioManager
     {
         durations.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
-    }
-
-
-    public static URLPlayer getUrlPlayer() 
-    {
-        return urlPlayer;
     }
 }
