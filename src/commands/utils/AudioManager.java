@@ -3,11 +3,16 @@ package commands.utils;
 import net.dv8tion.jda.audio.player.URLPlayer;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 public class AudioManager
@@ -15,7 +20,9 @@ public class AudioManager
     private ArrayList<Integer> durations = new ArrayList<>();
     private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
-    public  URLPlayer urlPlayer;
+    private static URLPlayer urlPlayer;
+    private static int timeleft;
+
 
     /*
     ****NOTE TO JACK****
@@ -36,6 +43,7 @@ public class AudioManager
 
       */
 
+
     public synchronized void addSong(MessageReceivedEvent event, String[] args)
     {
         long totalTime = 0;
@@ -47,6 +55,21 @@ public class AudioManager
             {
                 durations.add(calcLength(args));
                 totalTime += durations.get(0);
+                timeleft = durations.get(0);
+                soundTimer.scheduleAtFixedRate(new TimerTask() 
+                {
+                    @Override
+                    public void run()
+                    {
+                        timeleft -= 1000;
+                        if(timeleft <= 0)
+                        {
+                            soundTimer.cancel();
+                            soundTimer.purge();
+                        }
+                    }
+                }, 1000, 1000);
+
             }
             catch (IOException e)
             {
@@ -58,9 +81,7 @@ public class AudioManager
         {
             try
             {
-                //TODO: PUT IN THE CURRENT TIME LEFT IN THE SONG THAT IS PLAYING HERE!!!!!!!
-
-                //totalTime = INSERTVAL
+                totalTime = timeleft;
 
                 for (int i = 1; i < durations.size(); i++)
                 {
@@ -87,15 +108,30 @@ public class AudioManager
                 {
                     event.getGuild().getAudioManager().closeAudioConnection();
                 }
-                playNext(event, args);
+                
+                timeleft = durations.get(0);
+                soundTimer.scheduleAtFixedRate(new TimerTask()
+                {
+                @Override
+                public void run()
+                {
+                    timeleft -= 1000;
+                    if(timeleft <= 0)
+                    {
+                        soundTimer.cancel();
+                        soundTimer.purge();
+                    }
+                }
+            }, 1000, 1000);
+                
+            playNext(event, args);
             }
         }, totalTime);
 
 
     }
 
-    private void playNext(MessageReceivedEvent event, String[] args)
-    {
+    private void playNext(MessageReceivedEvent event, String[] args){
         if (args[1]!=null) {
             String suffix = args[1];
             URL audioUrl = null;
@@ -107,7 +143,7 @@ public class AudioManager
                 HttpURLConnection tempCon = (HttpURLConnection) temp;
                 //get the redirect url.
                 String urlString = tempCon.getHeaderField("location");
-                BotLogger.log("[Internal]"," Response code:" + tempCon.getResponseCode());
+                BotLogger.log(BotLogger.mediumTimestamp,"[Internal]"," Response code:" + tempCon.getResponseCode());
                 audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "/stream?client_id=" + sckey);
                 //manually redirect
                 HttpURLConnection.setFollowRedirects(false);
@@ -148,26 +184,25 @@ public class AudioManager
                     event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
                 if (urlPlayer!=null&&!urlPlayer.isStopped()) {
                     urlPlayer.play();
-                    BotLogger.log("[Internal]"," Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
+                    BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Internal]"," Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
                 }
                 else if (urlPlayer!=null)
                     urlPlayer.restart();
                 else {
-                    BotLogger.logErr(BotLogger.ERROR,"Invalid URLPlayer.");
+                    BotLogger.logErr(BotLogger.mediumTimestamp,BotLogger.ERROR,"Invalid URLPlayer.");
                     event.getTextChannel().sendMessage("Error: Unable to resolve player.");
                 }
             }
         }
     }
 
-    private int calcLength(String[] args) throws java.io.IOException
-    {
+    private int calcLength(String[] args) throws java.io.IOException{
         String suffix = args[1];
         int length;
         URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
         HttpURLConnection tempCon = (HttpURLConnection) temp;
         String urlString = tempCon.getHeaderField("location");
-        BotLogger.log(BotLogger.INTERNAL," Response code:" + tempCon.getResponseCode());
+        BotLogger.log(BotLogger.mediumTimestamp,BotLogger.INTERNAL," Response code:" + tempCon.getResponseCode());
         HttpURLConnection.setFollowRedirects(false);
         InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "?client_id=" + sckey).openStream();
         int i;
@@ -188,9 +223,14 @@ public class AudioManager
         return length;
     }
 
-    public void stop(MessageReceivedEvent event) 
-    {
+    public void stop(MessageReceivedEvent event) {
         durations.clear();
         event.getGuild().getAudioManager().closeAudioConnection();
     }
+
+
+    public static URLPlayer getUrlPlayer() {
+        return urlPlayer;
+    }
+
 }
