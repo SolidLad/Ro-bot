@@ -3,8 +3,6 @@ package commands.utils;
 import net.dv8tion.jda.audio.player.URLPlayer;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -21,27 +19,8 @@ public class AudioManager
     private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
     private static URLPlayer urlPlayer;
-    private static int timeleft;
-
-
-    /*
-    ****NOTE TO JACK****
-    *
-    * The queing is almost done.
-    * It only has a problem with adding the value of the current playing song (durations.get(0)) because we don't know the current time in the song, so we can''t
-    * just grab durations.get(0) because the song has already started
-    *
-    *
-    * You need to figure out how to keep track of the currently playing song so we can add it in the marked spot below, in order to prevent a song from
-    * being turned off prematurely
-    *
-    * Once you do this, sound queing is complete
-    *
-    *
-    * John
-    *
-
-      */
+    private static long time1;
+    private static long time2;
 
 
     public synchronized void addSong(MessageReceivedEvent event, String[] args)
@@ -51,25 +30,12 @@ public class AudioManager
         if (durations.size() == 0)
         {
             playNext(event, args);
+            time1 = new Date().getTime();
+            
             try
             {
                 durations.add(calcLength(args));
                 totalTime += durations.get(0);
-                timeleft = durations.get(0);
-                soundTimer.scheduleAtFixedRate(new TimerTask() 
-                {
-                    @Override
-                    public void run()
-                    {
-                        timeleft -= 1000;
-                        if(timeleft <= 0)
-                        {
-                            soundTimer.cancel();
-                            soundTimer.purge();
-                        }
-                    }
-                }, 1000, 1000);
-
             }
             catch (IOException e)
             {
@@ -81,7 +47,8 @@ public class AudioManager
         {
             try
             {
-                totalTime = timeleft;
+                time2 = new Date().getTime();
+                totalTime = time2 - time1;
 
                 for (int i = 1; i < durations.size(); i++)
                 {
@@ -104,27 +71,13 @@ public class AudioManager
             {
                 //this closes the queue if one sound is left
                 durations.remove(0);
-                if(durations.size() == 0)
+                if(durations.size() < 1)
                 {
                     event.getGuild().getAudioManager().closeAudioConnection();
                 }
-                
-                timeleft = durations.get(0);
-                soundTimer.scheduleAtFixedRate(new TimerTask()
-                {
-                @Override
-                public void run()
-                {
-                    timeleft -= 1000;
-                    if(timeleft <= 0)
-                    {
-                        soundTimer.cancel();
-                        soundTimer.purge();
-                    }
-                }
-            }, 1000, 1000);
-                
-            playNext(event, args);
+
+                playNext(event, args);
+                time1 = new Date().getTime();
             }
         }, totalTime);
 
