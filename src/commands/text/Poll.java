@@ -14,7 +14,7 @@ public class Poll implements Command {
         try {
             JSONObject json = jsonEncode(args);
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                HttpPost request = new HttpPost("https://strawpoll.me/api/v2/polls/");
+                HttpPost request = new HttpPost("https://strawpoll.me/api/v2/polls");
                 StringEntity params = new StringEntity(json.toString(), "UTF-8");
                 params.setContentType("application/json");
                 request.setEntity(params);
@@ -39,7 +39,6 @@ public class Poll implements Command {
         obj.put("multi", false);
         obj.put("dupcheck", "normal");
         obj.put("captcha", false);
-        System.out.println(obj);
         return obj;
     }
 }

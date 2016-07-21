@@ -8,9 +8,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
 
 public class AudioManager
@@ -110,7 +107,7 @@ public class AudioManager
                 HttpURLConnection tempCon = (HttpURLConnection) temp;
                 //get the redirect url.
                 String urlString = tempCon.getHeaderField("location");
-                BotLogger.log(BotLogger.mediumTimestamp,"[Internal]"," Response code:" + tempCon.getResponseCode());
+                BotLogger.log("[Internal]"," Response code:" + tempCon.getResponseCode());
                 audioUrl = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "/stream?client_id=" + sckey);
                 //manually redirect
                 HttpURLConnection.setFollowRedirects(false);
@@ -151,12 +148,12 @@ public class AudioManager
                     event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
                 if (urlPlayer!=null&&!urlPlayer.isStopped()) {
                     urlPlayer.play();
-                    BotLogger.log("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]","[Internal]"," Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
+                    BotLogger.log("[Internal]"," Playing SC track: " + suffix + " on channel: " + event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
                 }
                 else if (urlPlayer!=null)
                     urlPlayer.restart();
                 else {
-                    BotLogger.logErr(BotLogger.mediumTimestamp,BotLogger.ERROR,"Invalid URLPlayer.");
+                    BotLogger.logErr(BotLogger.ERROR,"Invalid URLPlayer.");
                     event.getTextChannel().sendMessage("Error: Unable to resolve player.");
                 }
             }
@@ -170,7 +167,7 @@ public class AudioManager
         URLConnection temp = new URL("http://api.soundcloud.com/resolve.json?url=" + suffix + "&client_id=" + sckey).openConnection();
         HttpURLConnection tempCon = (HttpURLConnection) temp;
         String urlString = tempCon.getHeaderField("location");
-        BotLogger.log(BotLogger.mediumTimestamp,BotLogger.INTERNAL," Response code:" + tempCon.getResponseCode());
+        BotLogger.log(BotLogger.INTERNAL," Response code:" + tempCon.getResponseCode());
         HttpURLConnection.setFollowRedirects(false);
         InputStream in = new URL("http://api.soundcloud.com/tracks/" + urlString.substring(34, urlString.indexOf(".json")) + "?client_id=" + sckey).openStream();
         int i;

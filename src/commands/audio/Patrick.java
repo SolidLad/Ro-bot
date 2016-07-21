@@ -11,9 +11,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Timer;
@@ -59,7 +56,7 @@ public class Patrick implements Command {
                         else if (player!=null)
                             player.restart();
                         else {
-                            BotLogger.logErr("[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)) + "]", BotLogger.ERROR, "Invalid URLPlayer.");
+                            BotLogger.logErr(BotLogger.ERROR, "Invalid URLPlayer.");
                             event.getTextChannel().sendMessage("Error: Unable to resolve player.");
                         }
                         Timer t = new Timer();
