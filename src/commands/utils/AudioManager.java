@@ -14,7 +14,7 @@ public class AudioManager
 {
     private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
-    private static URLPlayer urlPlayer;
+    public static URLPlayer urlPlayer;
     private static long end;
     private long totalTime = 0;
     HashMap<Integer, String> song = new HashMap<Integer, String>();

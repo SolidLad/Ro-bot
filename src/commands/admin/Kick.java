@@ -19,7 +19,7 @@ public class Kick implements Command {
                 target = aUser;
         }
         List<Role> authorRoles = event.getGuild().getRolesForUser(event.getAuthor());
-        if (target!=null){//&&authorRoles.contains(event.getGuild().getRoleById("Admin"))) {
+        if (target!=null&&authorRoles.contains(event.getGuild().getRoleById("194965592774541322"))) {
             gm.kick(target);
         }
     }
