@@ -15,7 +15,6 @@ import java.util.*;
 
 public class AudioManager
 {
-    private ArrayList<Integer> durations = new ArrayList<>();
     private String sckey = FileIO.readFile("stuff2.gitignore");
     private Timer soundTimer = new Timer();
     private static URLPlayer urlPlayer;
@@ -32,7 +31,6 @@ public class AudioManager
         {
             try
             {
-
                 //length of song
                 int dur = calcLength(args[1]);
                 //puts the song and duration in hashmap
@@ -56,6 +54,26 @@ public class AudioManager
             {
                 //calculates song duration
                 int dur = calcLength(args[1]);
+                
+                boolean check = true;
+                while(check)
+                {
+                    for(int i = 0; i < keys1.size(); i++)
+                    {
+                        if(keys1.get(i) == dur)
+                        {
+                            dur += 1;
+                            check = true;
+                            break;
+                        }
+                        else
+                        {
+                            check = false;
+                        }
+                    }
+                }
+                
+                
                 //puts song in hashmap
                 song.put(dur, args[1]);
                 //puts duration in key array
