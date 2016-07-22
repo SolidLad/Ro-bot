@@ -8,6 +8,6 @@
 *.secret
 
 #Ignore .idea
-/.idea/
+.idea
 *.xml
 *.iml
