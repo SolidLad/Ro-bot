@@ -1,3 +1,5 @@
+package commands.utils;
+
 import commands.utils.Command;
 import commands.utils.ServerPackage;
 
@@ -9,7 +11,7 @@ public class CommandHandler {
     private String commandFolderPath = "src/commands";
     private String[] bannedFolders = new String[] {"utils"};
     private File commandFolder;
-    Map<String, Command> commands = new HashMap<>();
+    public static Map<String, Command> commands = new HashMap<>();
 
 
     public CommandHandler() {
