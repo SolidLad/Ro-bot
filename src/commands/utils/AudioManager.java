@@ -12,7 +12,7 @@ import java.util.*;
 
 public class AudioManager
 {
-    private String sckey = FileIO.readFile("stuff2.gitignore");
+    private String sckey = FileIO.readFile("soundcloud.secret");
     private Timer soundTimer = new Timer();
     public static URLPlayer urlPlayer;
     private static long end;

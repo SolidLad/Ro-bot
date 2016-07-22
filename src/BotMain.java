@@ -6,7 +6,7 @@ public class BotMain {
     public static String token;
     public static void main(String[] args)
     {
-        token = FileIO.readFile("stuff.gitignore");
+        token = FileIO.readFile("bot.secret");
         try
         {
             new JDABuilder()
