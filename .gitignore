@@ -1,0 +1,13 @@
+#Ignore Compiled Files
+*.class
+
+#Ignore Dependencies
+*.jar
+
+#Ignore key files
+*.secret
+
+#Ignore .idea
+/.idea/
+*.xml
+*.iml
