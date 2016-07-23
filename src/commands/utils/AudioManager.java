@@ -2,6 +2,9 @@ package commands.utils;
 
 import net.dv8tion.jda.audio.player.URLPlayer;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.sourceforge.jaad.mp4.boxes.impl.DataEntryUrlBox;
+
+import javax.sound.midi.SysexMessage;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,108 +18,50 @@ public class AudioManager
     private String sckey = FileIO.readFile("sc.secret");
     private Timer soundTimer = new Timer();
     public static URLPlayer urlPlayer;
-    private static long end;
-    private long totalTime = 0;
-    HashMap<Integer, String> song = new HashMap<Integer, String>();
-    ArrayList<Integer> keys1 = new ArrayList<Integer>();
+    private long endTimeOfQueue;
+    MessageReceivedEvent lastEvent;
+    private int queueSize = 0;
 
-    public synchronized void addSong(MessageReceivedEvent event, String[] args)
-    {
-        totalTime = 0;
+    private class KillQueue extends TimerTask {
 
-        if(song.size() == 0)
-        {
-            try
-            {
-                //length of song
-                int dur = calcLength(args[1]);
-                //puts the song and duration in hashmap
-                song.put(dur, args[1]);
-                //adds duration for the key index
-                keys1.add(dur);
-                //plays song
-                playNext(event, args[1]);
-                totalTime += dur;
-                end = (new Date().getTime()) + dur;
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
+        @Override
+        public void run() {
+            queueSize--;
+            if(queueSize <= 0) {
+                lastEvent.getGuild().getAudioManager().closeAudioConnection();
             }
         }
+    }
 
-        else
-        {
-            try
-            {
-                //calculates song duration
-                int dur = calcLength(args[1]);
-
-                boolean check = true;
-                while(check)
-                {
-                    for(int i = 0; i < keys1.size(); i++)
-                    {
-                        if(keys1.get(i) == dur)
-                        {
-                            dur += 1;
-                            check = true;
-                            break;
-                        }
-                        else
-                        {
-                            check = false;
-                        }
+    public synchronized void addSong(MessageReceivedEvent event, String[] args) {
+        lastEvent = event;
+        if(queueSize == 0) {
+            endTimeOfQueue = System.currentTimeMillis();
+        }
+        try {
+            if(args.length > 1) {
+                queueSize++;
+                int songLength = calcLength(args[1]);
+                soundTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        playNext(event, args);
                     }
-                }
-
-
-                //puts song in hashmap
-                song.put(dur, args[1]);
-                //puts duration in key array
-                keys1.add(dur);
-                //grabs time
-                long temptime = new Date().getTime();
-                totalTime = end - temptime;
-
-                for (int i = 1; i < song.size(); i++)
-                {
-                    totalTime += keys1.get(i);
-                }
+                }, new Date(endTimeOfQueue));
+                //Set the queue so the next song starts at the end of this song
+                endTimeOfQueue += songLength;
+            } else {
+                BotLogger.logErr(BotLogger.ERROR, "Malformed Command");
             }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        soundTimer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                System.out.println(song.size());
-                song.remove(keys1.get(0));
-                keys1.remove(0);
-                if(song.size() == 0)
-                {
-                    event.getGuild().getAudioManager().closeAudioConnection();
-                }
-                else
-                {
-                    System.out.println("testing");
-                    playNext(event, song.get(keys1.get(0)));
-                    end += keys1.get(0);
-                }
-            }
-        }, totalTime);
     }
 
 
-    private void playNext(MessageReceivedEvent event, String args){
-        if (args!=null) {
-            String suffix = args;
+    private void playNext(MessageReceivedEvent event, String args[]){
+        if (args.length > 1) {
+            String suffix = args[1];
             URL audioUrl = null;
             try {
                 URL trackUrl = new URL(suffix);
@@ -177,6 +122,11 @@ public class AudioManager
                     event.getTextChannel().sendMessage("Error: Unable to resolve player.");
                 }
             }
+            try {
+                soundTimer.schedule(new KillQueue(), calcLength(args[1]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -207,15 +157,14 @@ public class AudioManager
         return length;
     }
 
-    public void stop(MessageReceivedEvent event) {
-        song.clear();
-        keys1.clear();
-        event.getGuild().getAudioManager().closeAudioConnection();
-    }
-
-
     public static URLPlayer getUrlPlayer() {
         return urlPlayer;
+    }
+
+    //TODO: Slight problem with this method, when called it will wipe all audio from all channels.
+    public void stop(MessageReceivedEvent event) {
+        event.getGuild().getAudioManager().closeAudioConnection();
+        soundTimer.cancel();
     }
 
 }
