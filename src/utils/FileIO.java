@@ -1,9 +1,9 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import net.dv8tion.jda.entities.Guild;
+
+import java.io.*;
+
 public class FileIO {
     public static String readFile(String fileName){
         String contents = "";
@@ -24,5 +24,20 @@ public class FileIO {
             e.printStackTrace();
         }
         return contents;
+    }
+    public static void writeLog(String path, String msg) {
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(new File(path),true));
+            writer.write(msg+"\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
