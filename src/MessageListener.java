@@ -1,3 +1,4 @@
+import exceptions.MalformedCommandException;
 import utils.BotLogger;
 import utils.Command;
 import utils.CommandHandler;
@@ -27,7 +28,11 @@ public class MessageListener extends ListenerAdapter{
 //            thread.run();
 //        }
         if (cmd != null) {
-            cmd.run(event, args);
+            try {
+                cmd.run(event, args);
+            } catch (MalformedCommandException e) {
+                BotLogger.log(BotLogger.ERROR, "Malformed " + args[0] + " command");
+            }
         }
     }
 }
