@@ -17,10 +17,10 @@ public class Roll implements Command {
                 event.getTextChannel().sendMessage("Rolled a " + (random.nextInt(Integer.parseInt(args[1])-1) + 1)+" on a "+args[1]+" sided die.");
             }
             catch (NumberFormatException ex) {
-                event.getTextChannel().sendMessage("Invalid argument. Try ```!usage roll``` for more information on the ```roll``` command.");
+                event.getTextChannel().sendMessage("Invalid argument. Try ```>>usage roll``` for more information on the ```roll``` command.");
             }
         }
-        else event.getTextChannel().sendMessage("Invalid number of arguments. Try ```!usage roll``` for more information on the ```!roll``` command.");
+        else event.getTextChannel().sendMessage("Invalid number of arguments. Try ```>>usage roll``` for more information on the ```>>roll``` command.");
 
     }
     //

@@ -28,7 +28,7 @@ public class Ban implements Command {
             }
         }
         List<Role> authorRoles = event.getGuild().getRolesForUser(event.getAuthor());
-        if (target!=null&&authorRoles.contains(event.getGuild().getRoleById("194965592774541322"))) {
+        if (target!=null&&authorRoles.contains(event.getGuild().getRoles().stream().filter(role -> role.getName().equals("Bot Handler")).findFirst().orElse(null))) {
             gm.ban(target, Integer.parseInt(args[args.length-1]));
         }
     }
