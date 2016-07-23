@@ -1,10 +1,7 @@
 package commands.text;
 
-import com.sun.corba.se.impl.activation.CommandHandler;
-import com.sun.corba.se.impl.util.PackagePrefixChecker;
-import com.sun.corba.se.spi.activation.Server;
-import commands.utils.Command;
-import commands.utils.ServerPackage;
+import utils.Command;
+import utils.ServerPackage;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 import java.util.Set;

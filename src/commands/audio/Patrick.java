@@ -1,7 +1,7 @@
 package commands.audio;
 
-import commands.utils.BotLogger;
-import commands.utils.Command;
+import utils.BotLogger;
+import utils.Command;
 import net.dv8tion.jda.audio.player.FilePlayer;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 

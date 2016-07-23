@@ -1,9 +1,8 @@
 package commands.text;
 
-import commands.utils.Command;
+import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Usage implements Command{

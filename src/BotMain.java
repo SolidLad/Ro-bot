@@ -1,4 +1,4 @@
-import commands.utils.FileIO;
+import utils.FileIO;
 import net.dv8tion.jda.*;
 import javax.security.auth.login.LoginException;
 

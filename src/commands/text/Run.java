@@ -1,6 +1,6 @@
 package commands.text;
-import commands.utils.Command;
-import commands.utils.CommandHandler;
+import utils.Command;
+import utils.CommandHandler;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class Run implements Command{

@@ -1,4 +1,4 @@
-package commands.utils;
+package utils;
 
 import net.dv8tion.jda.entities.Guild;
 

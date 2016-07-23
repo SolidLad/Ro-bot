@@ -1,7 +1,4 @@
-package commands.utils;
-
-import commands.utils.Command;
-import commands.utils.ServerPackage;
+package utils;
 
 import java.io.File;
 import java.util.HashMap;
