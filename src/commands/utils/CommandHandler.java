@@ -9,7 +9,7 @@ import java.util.Map;
 public class CommandHandler {
 
     private String commandFolderPath = "src/commands";
-    private String[] bannedFolders = new String[] {"utils"};
+    private String[] bannedFolders = new String[] {"utils", "custom"};
     private File commandFolder;
     public static Map<String, Command> commands = new HashMap<>();
 
@@ -29,7 +29,7 @@ public class CommandHandler {
                 try {
                     Class<?> tempClass = Class.forName(parentFolderChain + "." + commandFolder.getName() + "." + subFile.getName().substring(0,subFile.getName().indexOf(".")));
                     Command tempCommand = (Command) tempClass.newInstance();
-                    commands.put("!"+subFile.getName().toLowerCase().substring(0, subFile.getName().indexOf(".")), tempCommand);
+                    commands.put(">>"+subFile.getName().toLowerCase().substring(0, subFile.getName().indexOf(".")), tempCommand);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
