@@ -1,5 +1,5 @@
 package commands.audio;
-import commands.utils.Command;
+import utils.Command;
 import net.dv8tion.jda.audio.AudioReceiveHandler;
 import net.dv8tion.jda.audio.CombinedAudio;
 import net.dv8tion.jda.audio.UserAudio;
@@ -12,7 +12,6 @@ import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Record implements Command{
     private byte[] data;

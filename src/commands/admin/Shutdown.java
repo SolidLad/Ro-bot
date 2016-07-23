@@ -1,8 +1,8 @@
 package commands.admin;
 
-import commands.utils.BotLogger;
-import commands.utils.Command;
-import commands.utils.FileIO;
+import utils.BotLogger;
+import utils.Command;
+import utils.FileIO;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class Shutdown implements Command {
@@ -14,6 +14,5 @@ public class Shutdown implements Command {
                 event.getJDA().shutdown();
         }
         BotLogger.logErr(BotLogger.DANGER, "User: " + event.getAuthor() + "From guild: " + event.getGuild() + " Attempted to shut down the system with invalid access keycode.");
-
     }
 }

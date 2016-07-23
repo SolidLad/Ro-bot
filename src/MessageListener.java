@@ -1,6 +1,6 @@
-import commands.utils.BotLogger;
-import commands.utils.Command;
-import commands.utils.CommandHandler;
+import utils.BotLogger;
+import utils.Command;
+import utils.CommandHandler;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 

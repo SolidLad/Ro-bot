@@ -1,7 +1,7 @@
 package sandbox;
 
 public class SandboxClassLoader extends ClassLoader{
-        private Class[] whitelist = {commands.utils.Command.class};
+        private Class[] whitelist = {utils.Command.class};
         @Override
         public Class<?> loadClass(String name) throws ClassNotFoundException {
             for (int i = 0; i < whitelist.length; i++) {

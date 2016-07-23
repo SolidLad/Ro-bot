@@ -1,6 +1,6 @@
 package commands.text;
 
-import commands.utils.Command;
+import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 public class Say implements Command {
 
@@ -20,5 +20,4 @@ public class Say implements Command {
         }
         return "";
     }
-
 }

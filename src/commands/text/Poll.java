@@ -1,5 +1,5 @@
 package commands.text;
-import commands.utils.Command;
+import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
