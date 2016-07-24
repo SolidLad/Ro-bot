@@ -1,5 +1,5 @@
+import net.dv8tion.jda.JDABuilder;
 import utils.FileIO;
-import net.dv8tion.jda.*;
 import javax.security.auth.login.LoginException;
 
 public class BotMain {

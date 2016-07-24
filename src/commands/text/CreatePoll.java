@@ -15,9 +15,9 @@ public class CreatePoll implements Command {
 
         @Override
         public void run() {
+            printVotes();
             poll.clear();
             votedUsers.clear();
-            printVotes();
         }
     }
 

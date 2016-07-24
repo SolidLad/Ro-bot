@@ -6,7 +6,8 @@
 
 #Ignore key files
 *.secret
-
+#Ignore logs & guild information
+guild
 #Ignore .idea
 .idea
 *.xml
