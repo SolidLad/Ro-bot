@@ -1,3 +1,5 @@
+package utils;
+
 import exceptions.MalformedCommandException;
 import utils.BotLogger;
 import utils.Command;
@@ -9,6 +11,7 @@ import net.dv8tion.jda.hooks.ListenerAdapter;
 public class MessageListener extends ListenerAdapter{
     private final CommandHandler commandHandler = new CommandHandler();
     private final GuildManager guildManager = new GuildManager();
+    public static long requests = 0;
 
     private String getMessage(MessageReceivedEvent event) {
         return event.getMessage().getContent();
@@ -33,8 +36,9 @@ public class MessageListener extends ListenerAdapter{
         if (cmd != null) {
             try {
                 cmd.run(event, args);
+                requests++;
             } catch (MalformedCommandException e) {
-                BotLogger.log(BotLogger.ERROR, "Malformed " + args[0] + " command");
+                BotLogger.log(BotLogger.ERROR, "Malformed " + args[0].substring(2) + " command");
             }
         }
     }

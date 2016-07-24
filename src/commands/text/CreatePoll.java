@@ -32,34 +32,39 @@ public class CreatePoll implements Command {
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
-            pollChannelEvent = event;
-            poll.clear();
-            votedUsers.clear();
-            //Save the
-            int timeReq = getTimeArgument(args);
-            int timeVal = timeReq;
-            //Total length of the options for the poll
-            int length = args.length - 1;
-            //If there wasn't a time argument then start options at args 1.
-            if(timeReq <= -1) {
-                //The default time delay is three minutes if none was specified
-                timeVal = 180000;
-                timeReq = 1;
-            }
-            //Else there was a time option and we have to skip over it.
-            else {
-                length -= 1;
-                timeReq = 2;
-            }
-            for (int i = timeReq; i < args.length; i++) {
-                poll.put(args[i], 0);
-            }
-            String message = "Vote up with " + length + " options!\nBelow are the possible options:\n";
-            for (String key : poll.keySet()) {
-                message += key + "\n";
-            }
-            pollChannelEvent.getTextChannel().sendMessage(message);
-            pollTimer.schedule(new FinishPoll(), timeVal);
+        for (int i = 0; i < args.length; i++) {
+            args[i] = args[i].toLowerCase();
+        }
+        if (args.length > 11 || args.length < 3 || duplicates(args))
+            throw new MalformedCommandException();
+        pollChannelEvent = event;
+        poll.clear();
+        votedUsers.clear();
+        //Save the
+        int timeReq = getTimeArgument(args);
+        int timeVal = timeReq;
+        //Total length of the options for the poll
+        int length = args.length - 1;
+        //If there wasn't a time argument then start options at args 1.
+        if(timeReq <= -1) {
+            //The default time delay is three minutes if none was specified
+            timeVal = 180000;
+            timeReq = 1;
+        }
+        //Else there was a time option and we have to skip over it.
+        else {
+            length -= 1;
+            timeReq = 2;
+        }
+        for (int i = timeReq; i < args.length; i++) {
+            poll.put(args[i], 0);
+        }
+        String message = "Vote up with " + length + " options!\nBelow are the possible options:\n";
+        for (String key : poll.keySet()) {
+            message += key + "\n";
+        }
+        pollChannelEvent.getTextChannel().sendMessage(message);
+        pollTimer.schedule(new FinishPoll(), timeVal);
     }
 
     /*
@@ -98,6 +103,8 @@ public class CreatePoll implements Command {
         if(!votedUsers.contains(id)) {
             //Put in the place of the option, the value of its votes + 1
             poll.put(args[1], poll.get(args[1]) + 1);
+            //add the id to voted users
+            votedUsers.add(id);
         }
     }
 
@@ -118,5 +125,15 @@ public class CreatePoll implements Command {
     protected void endVote() {
         pollTimer.cancel();
         new FinishPoll().run();
+    }
+    private boolean duplicates(final String[] array)
+    {
+        Set<String> lump = new HashSet<>();
+        for (String str : array)
+        {
+            if (lump.contains(str)) return true;
+            lump.add(str);
+        }
+        return false;
     }
 }

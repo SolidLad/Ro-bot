@@ -4,7 +4,6 @@ public class MalformedCommandException extends Exception {
     public MalformedCommandException() {
 
     }
-
     public MalformedCommandException(String message) {
         super (message);
     }

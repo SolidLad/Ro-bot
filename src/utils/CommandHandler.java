@@ -10,7 +10,6 @@ public class CommandHandler {
     private File commandFolder;
     public static Map<String, Command> commands = new HashMap<>();
 
-
     public CommandHandler() {
         commandFolder = new File(commandFolderPath);
         if(commandFolder.isDirectory()) {
@@ -48,5 +47,4 @@ public class CommandHandler {
         }
         return false;
     }
-
 }

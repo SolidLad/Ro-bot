@@ -17,7 +17,7 @@ public class GuildManager {
         }
         FileIO.writeLog(path,name);
         try {
-            if (Files.exists(Paths.get(path))&&FileIO.calcLines(path)>10){
+            if (Files.exists(Paths.get(path))&&FileIO.calcLines(path)>1000){
                 if (!Files.exists(Paths.get(path).resolveSibling(event.getTextChannel().getName()+".old")))
                     Files.move(Paths.get(path), Paths.get(path).resolveSibling(event.getTextChannel().getName()+".old"));
                 else {
