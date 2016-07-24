@@ -1,8 +1,17 @@
 package commands.text;
+import exceptions.MalformedCommandException;
 import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
-
 import java.util.*;
+
+/*
+ * TODO:
+ * WHAT DOES THIS CLASS NEED?
+ * - Check for the correct arguments
+ * - Make sure the voting system is NOT case sensitive
+ * - Check if the voting option exists, if not then don't throw an exception, tell the user.
+ * - Make sure that the user can't enter less than 2 options or more than 10 options.
+ */
 
 public class CreatePoll implements Command {
 
@@ -11,7 +20,7 @@ public class CreatePoll implements Command {
     private MessageReceivedEvent pollChannelEvent;
     private Timer pollTimer = new Timer();
 
-    private class finishPoll extends TimerTask {
+    private class FinishPoll extends TimerTask {
 
         @Override
         public void run() {
@@ -22,18 +31,65 @@ public class CreatePoll implements Command {
     }
 
     @Override
-    public void run(MessageReceivedEvent event, String[] args) {
-        pollChannelEvent = event;
-        poll.clear();
-        votedUsers.clear();
-        for(int i = 1; i < args.length; i++) {
-            poll.put(args[i], 0);
+    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
+            pollChannelEvent = event;
+            poll.clear();
+            votedUsers.clear();
+            //Save the
+            int timeReq = getTimeArgument(args);
+            int timeVal = timeReq;
+            //Total length of the options for the poll
+            int length = args.length - 1;
+            //If there wasn't a time argument then start options at args 1.
+            if(timeReq <= -1) {
+                //The default time delay is three minutes if none was specified
+                timeVal = 180000;
+                timeReq = 1;
+            }
+            //Else there was a time option and we have to skip over it.
+            else {
+                length -= 1;
+                timeReq = 2;
+            }
+            for (int i = timeReq; i < args.length; i++) {
+                poll.put(args[i], 0);
+            }
+            String message = "Vote up with " + length + " options!\nBelow are the possible options:\n";
+            for (String key : poll.keySet()) {
+                message += key + "\n";
+            }
+            pollChannelEvent.getTextChannel().sendMessage(message);
+            pollTimer.schedule(new FinishPoll(), timeVal);
+    }
+
+    /*
+        This function gets the time requirement in milliseconds,
+        if there is no time req it will return -1.
+     */
+    private int getTimeArgument(String args[]) {
+        if(args.length>=2&&args[1].indexOf("-t")==0) {
+            //Save it
+            String time = args[1];
+            //Chop off the flag that tells us it is a time
+            time = time.substring(time.indexOf("-t") + 2, time.length());
+            //Save the postfix
+            String postfix = time.substring(time.length()-1);
+            //Chop off the postfix
+            time = time.substring(0, time.length()-1);
+            int timeVal = 0;
+            switch(postfix) {
+                //Minute case
+                case("m"):
+                    timeVal = 60000 * Integer.valueOf(time);
+                    break;
+                //Second case
+                case("s"):
+                    timeVal = 1000 * Integer.valueOf(time);
+                    break;
+            }
+            return timeVal;
         }
-        event.getTextChannel().sendMessage("Vote up with " + (args.length - 1) + " options!\nBelow are the possible options:");
-        for(String key: poll.keySet()) {
-            event.getTextChannel().sendMessage(key);
-        }
-        pollTimer.schedule(new finishPoll(), 30000);
+        return -1;
     }
 
     protected void recordVote(MessageReceivedEvent event, String args[]) {
@@ -46,16 +102,21 @@ public class CreatePoll implements Command {
     }
 
     private void printVotes() {
-        pollChannelEvent.getTextChannel().sendMessage("Results of Polling:");
+        String message = "Results of Polling:\n";
         //Set the highestOption as the first one by default
-        //TODO: This line is broken
         String highestVoteOption = poll.keySet().iterator().next();
         for(String key: poll.keySet()) {
             if(poll.get(key) > poll.get(highestVoteOption)) {
                 highestVoteOption = key;
             }
-            pollChannelEvent.getTextChannel().sendMessage(key + ": " + poll.get(key));
+            message += key + ": " + poll.get(key) + "\n";
         }
-        pollChannelEvent.getTextChannel().sendMessage("Winner is " + highestVoteOption + ", with " + poll.get(highestVoteOption) + " votes!");
+        message += "Winner is " + highestVoteOption + ", with " + poll.get(highestVoteOption) + " votes!";
+        pollChannelEvent.getTextChannel().sendMessage(message);
+    }
+
+    protected void endVote() {
+        pollTimer.cancel();
+        new FinishPoll().run();
     }
 }
