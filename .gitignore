@@ -1,6 +1,6 @@
 #Ignore Compiled Files
 *.class
-
+out
 #Ignore Dependencies
 *.jar
 

@@ -1,10 +1,6 @@
 package utils;
 
 import exceptions.MalformedCommandException;
-import utils.BotLogger;
-import utils.Command;
-import utils.CommandHandler;
-import utils.GuildManager;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 

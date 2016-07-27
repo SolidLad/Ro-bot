@@ -1,8 +1,13 @@
 package utils;
 
 import net.dv8tion.jda.entities.Guild;
+import org.tritonus.share.sampled.file.TAudioFileFormat;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
+import java.util.Map;
 
 public class FileIO {
     public static String readFile(String fileName){
@@ -61,5 +66,19 @@ public class FileIO {
         } finally {
             is.close();
         }
+    }
+    public static int getDurationOfMp3(File file) throws UnsupportedAudioFileException, IOException {
+
+        AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
+        if (fileFormat instanceof TAudioFileFormat) {
+            Map<?, ?> properties = ((TAudioFileFormat) fileFormat).properties();
+            String key = "duration";
+            Long microseconds = (Long) properties.get(key);
+            int mili = (int) (microseconds / 1000);
+            return mili;
+        } else {
+            throw new UnsupportedAudioFileException();
+        }
+
     }
 }
