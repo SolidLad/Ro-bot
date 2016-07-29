@@ -22,6 +22,9 @@ public class MessageListener extends ListenerAdapter{
             BotLogger.log(BotLogger.LOGGING, "USER:" + event.getAuthor().getUsername() + " Said: [" + event.getMessage().getContent() + "]");
             guildManager.log(event,event.getGuild());
         }
+        //make sure bot cant be called by another bot to prevent loops.
+        if (event.getAuthor().isBot())
+            return;
         //Gets all possible commands and finds the one that you typed, then runs its main method.
         String[] args = getMessage(event).split(" ");
         Command cmd = commandHandler.commands.get(args[0]);

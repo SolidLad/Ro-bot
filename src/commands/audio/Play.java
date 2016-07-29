@@ -1,13 +1,40 @@
 package commands.audio;
 
+import exceptions.MalformedCommandException;
+import net.dv8tion.jda.managers.AudioManager;
+import net.dv8tion.jda.player.MusicPlayer;
+import net.dv8tion.jda.player.source.AudioSource;
+import net.dv8tion.jda.player.source.RemoteSource;
 import utils.Command;
 import utils.ServerPackage;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class Play implements Command {
 
     @Override
-    public void run(MessageReceivedEvent event, String[] args) {
-        ServerPackage.audioManager.addSong(event, args);
+    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
+        if (args.length!=2)
+            throw new MalformedCommandException();
+        final List<String> YOUTUBE_DL_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("C:\\Program Files\\Python27\\python.exe", "youtube-dl", "-q", "-f", "bestaudio/best", "--no-playlist", "-o", "-"));
+        final List<String> FFMPEG_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("ffmpeg.exe", "-i", "-", "-f", "s16be", "-ac", "2", "-ar", "48000", "-map", "a", "-"));
+        AudioSource source = new RemoteSource(args[1], YOUTUBE_DL_LAUNCH_ARGS, FFMPEG_LAUNCH_ARGS);
+        MusicPlayer player;
+        AudioManager manager = event.getGuild().getAudioManager();
+
+        if (manager.getSendingHandler()==null) {
+            player = new MusicPlayer();
+            manager.setSendingHandler(player);
+        }
+        else player = ((MusicPlayer) manager.getSendingHandler());
+        player.getAudioQueue().add(source);
+        System.out.println(player.getAudioQueue().size());
+        if (!event.getGuild().getAudioManager().isConnected())
+            event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
+        if (player.isStopped()&& !player.isPlaying())
+            player.play();
     }
 }

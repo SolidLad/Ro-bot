@@ -36,7 +36,7 @@ public class CreatePoll implements Command {
             args[i] = args[i].toLowerCase();
         }
         if (args.length > 11 || args.length < 3 || duplicates(args))
-            throw new MalformedCommandException();
+            throw new MalformedCommandException("Invalid number of, or duplicate commands!");
         pollChannelEvent = event;
         poll.clear();
         votedUsers.clear();

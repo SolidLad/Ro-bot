@@ -12,6 +12,7 @@ public class Vote implements Command {
     @Override
     public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
         //Get the poll class and record the vote
+        // FIXME: 7/25/2016 causes a error if poll does not yet exist
         CreatePoll poll = (CreatePoll) ServerPackage.commands.get(">>createpoll");
         for (int i = 0; i < args.length; i++) {
             args[i] = args[i].toLowerCase();

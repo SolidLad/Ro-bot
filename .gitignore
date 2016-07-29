@@ -3,7 +3,8 @@
 out
 #Ignore Dependencies
 *.jar
-
+*.exe
+youtube-dl
 #Ignore key files
 *.secret
 #Ignore logs & guild information

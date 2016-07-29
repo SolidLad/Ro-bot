@@ -13,7 +13,6 @@ public class Run implements Command{
         String[] commands = msg.split("\n");
         for (String aCommand :
                 commands) {
-            System.out.println(aCommand);
             String[] arguments = aCommand.split(" ");
             Command command = CommandHandler.commands.get(arguments[0]);
             if (command!=null)

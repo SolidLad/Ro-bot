@@ -5,9 +5,6 @@ import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import utils.Command;
 import utils.ServerPackage;
 
-/**
- * Created by jack on 7/23/16.
- */
 public class EndPoll implements Command {
     @Override
     public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
