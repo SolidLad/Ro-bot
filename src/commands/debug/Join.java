@@ -22,4 +22,8 @@ public class Join implements Command {
             }
         else throw  new MalformedCommandException();
     }
+    public String getDescription()
+    {
+        return "Debug command";
+    }
 }

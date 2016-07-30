@@ -43,4 +43,9 @@ public class Playlist implements Command {
         if (player.isStopped()&& !player.isPlaying())
             player.play();
     }
+
+    public String getDescription()
+    {
+        return "Plays a playlist from youtube  USAGE: >>playlist <link>";
+    }
 }

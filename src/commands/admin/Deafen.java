@@ -32,4 +32,9 @@ public class Deafen implements Command{
             gm.deafen(target);
         }
     }
+
+    public String getDescription()
+    {
+        return "Deafens a user  USAGE: >>deafen <username>";
+    }
 }

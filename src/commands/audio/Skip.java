@@ -30,4 +30,9 @@ public class Skip implements Command{
             throw new MalformedCommandException();
         player.skipToNext();
     }
+
+    public String getDescription()
+    {
+        return "Skips the current playing song  USAGE: >>skip";
+    }
 }

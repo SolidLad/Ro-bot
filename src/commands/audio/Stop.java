@@ -23,4 +23,8 @@ public class Stop implements Command {
         }
     }
 
+    public String getDescription()
+    {
+        return "Stops all music in the voice channel and clears any queues  USAGE: >>stop";
+    }
 }

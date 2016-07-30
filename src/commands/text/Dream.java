@@ -7,4 +7,8 @@ public class Dream implements Command {
     public void run(MessageReceivedEvent event, String[] args) {
         event.getTextChannel().sendMessage("Ｉ ｄｉｄ ｎＡＵＧＨＴｔ！ Ｍｉｓｔｅｒ Ｅｌｅｃｔｉｃ ｓｅｎｄ ｈｉｍ ｔｏ ｔｈｅ ｐｒｉｎｃｉｐａｌ＇ｓ ｏｆｆｉｃｅ ａｎｄ ｈａｖｅ ｈｉｍ ＥＸｐｅｌＬｅｄ！\uFEFF https://www.youtube.com/watch?v=CAtDt_qjQ4o");
     }
+    public String getDescription()
+    {
+        return "Prints a funny message  USAGE: >>dream";
+    }
 }

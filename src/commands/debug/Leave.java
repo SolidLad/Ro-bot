@@ -8,4 +8,9 @@ public class Leave implements Command {
     public void run(MessageReceivedEvent event, String[] args) {
         event.getGuild().getAudioManager().closeAudioConnection();
     }
+
+    public String getDescription()
+    {
+        return "Debug Command";
+    }
 }

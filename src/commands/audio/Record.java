@@ -102,4 +102,9 @@ public class Record implements Command{
         }
 
     }
+
+    public String getDescription()
+    {
+        return "Records audio in a channel  USAGE: >>record";
+    }
 }

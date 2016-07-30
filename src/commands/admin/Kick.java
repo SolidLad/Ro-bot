@@ -23,4 +23,9 @@ public class Kick implements Command {
             gm.kick(target);
         }
     }
+
+    public String getDescription()
+    {
+        return "Kicks a user from the server  USAGE: >>kick <username>";
+    }
 }

@@ -25,4 +25,9 @@ public class Volume implements Command{
         }
 
     }
+
+    public String getDescription()
+    {
+        return "Sets the volume of music  >>volume <level>";
+    }
 }

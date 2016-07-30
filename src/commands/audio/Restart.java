@@ -15,4 +15,9 @@ public class Restart implements Command {
         event.getTextChannel().sendMessage("Current song was restarted.");
 
     }
+
+    public String getDescription()
+    {
+        return "Restarts a song that's playing  USAGE: >>restart";
+    }
 }

@@ -7,9 +7,11 @@ import utils.Command;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ClearChannel implements Command {
+public class ClearChannel implements Command
+{
     @Override
-    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
+    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException
+    {
         if (args.length!=2|| !args[1].equalsIgnoreCase("iAcceptTheConsequences"))
             throw new MalformedCommandException();
         else {
@@ -33,4 +35,13 @@ public class ClearChannel implements Command {
         }
         else return false;
     }
+
+    public String getDescription()
+    {
+        return "Clears a chat channel  USAGE: >>clearchannel <iAcceptTheConsequences>";
+    }
+
 }
+
+
+

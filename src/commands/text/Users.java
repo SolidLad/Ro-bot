@@ -14,4 +14,9 @@ public class Users implements Command {
         }
         event.getChannel().sendMessage("\n```" + msg + "```");
     }
+
+    public String getDescription()
+    {
+        return "Lists all users  USAGE: >>users";
+    }
 }

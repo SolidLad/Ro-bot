@@ -32,4 +32,9 @@ public class Unmute implements Command{
             gm.unmute(target);
         }
     }
+
+    public String getDescription()
+    {
+        return "Unmutes a user  USAGE: >>unmute <username>";
+    }
 }

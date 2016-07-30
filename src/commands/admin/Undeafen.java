@@ -32,4 +32,9 @@ public class Undeafen implements Command{
             gm.undeafen(target);
         }
     }
+
+    public String getDescription()
+    {
+        return "Undeafens a user  USAGE: >>undeafen <username>";
+    }
 }

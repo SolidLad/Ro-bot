@@ -19,4 +19,9 @@ public class ServerInfo implements Command{
         msg += "Users: "+guild.getUsers().size()+"";
         event.getTextChannel().sendMessage(new MessageBuilder().appendCodeBlock(msg, "js").build());
     }
+
+    public String getDescription()
+    {
+        return "Prints info about the server  USAGE: >>serverinfo";
+    }
 }

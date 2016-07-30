@@ -16,4 +16,9 @@ public class Resume implements Command {
         player.play();
         event.getTextChannel().sendMessage("Playback was resumed");
     }
+
+    public String getDescription()
+    {
+        return "Resumes a paused song  USAGE: >>resume";
+    }
 }

@@ -8,4 +8,8 @@ public class Info implements Command {
     public void run(MessageReceivedEvent event, String[] args) {
         event.getTextChannel().sendMessage("Command is empty, try again later please!");
     }
+    public String getDescription()
+    {
+        return "Work is underway for this command";
+    }
 }

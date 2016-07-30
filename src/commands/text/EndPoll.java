@@ -11,4 +11,9 @@ public class EndPoll implements Command {
         CreatePoll  poll = (CreatePoll) CommandHandler.commands.get(">>createpoll");
         poll.endVote();
     }
+
+    public String getDescription()
+    {
+        return "Ends a poll  USAGE: >>endpoll";
+    }
 }

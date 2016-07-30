@@ -18,4 +18,9 @@ public class Stats implements Command{
                 "Total requests: "+ MessageListener.requests+"```";
         event.getChannel().sendMessage(msg);
     }
+
+    public String getDescription()
+    {
+        return "Returns stats about server  USAGE: >>stats";
+    }
 }

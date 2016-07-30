@@ -77,4 +77,9 @@ public class Patrick implements Command {
             }
         }
     }
+
+    public String getDescription()
+    {
+        return "Plays a sound by Patrick  USAGE: >>patrick <sound>";
+    }
 }

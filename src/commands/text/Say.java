@@ -37,4 +37,9 @@ public class Say implements Command {
             throw new MalformedCommandException();
         }
     }
+
+    public String getDescription()
+    {
+        return "Makes bot repeat what you say  USAGE: >>say <guildid> <message>";
+    }
 }

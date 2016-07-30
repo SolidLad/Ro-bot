@@ -16,4 +16,9 @@ public class Pause implements Command {
             event.getTextChannel().sendMessage("Playback has been successfully paused.");
         }
     }
+
+    public String getDescription()
+    {
+        return "Pauses current song  USAGE: >>pause";
+    }
 }

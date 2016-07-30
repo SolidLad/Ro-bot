@@ -31,4 +31,10 @@ public class Mute implements Command {
             gm.mute(target);
         }
     }
+
+    public String getDescription()
+    {
+        return "Mutes a user  USAGE: >>mute <username>";
+    }
+
 }

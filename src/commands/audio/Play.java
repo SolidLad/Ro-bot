@@ -18,7 +18,7 @@ import java.util.List;
 public class Play implements Command {
     private PlayerEventListener listener;
     private AudioSource source;
-    private static final List<String> YOUTUBE_DL_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("C:\\Program Files\\Python27\\python.exe", "youtube-dl", "-q", "-f", "bestaudio/best", "--no-playlist", "-o", "-"));
+    private static final List<String> YOUTUBE_DL_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("C:\\Python27\\python.exe", "youtube-dl", "-q", "-f", "bestaudio/best", "--no-playlist", "-o", "-"));
     private static final List<String> FFMPEG_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("ffmpeg.exe", "-i", "-", "-f", "s16be", "-ac", "2", "-ar", "48000", "-map", "a", "-"));
 
     @Override
@@ -84,5 +84,10 @@ public class Play implements Command {
             return finalString;
         }
         return null;
+    }
+
+    public String getDescription()
+    {
+        return "Plays either a youtube video or soundcloud song. If a string is provided instead of a link, the bot will search and play the first result  USAGE: >>play <link>";
     }
 }

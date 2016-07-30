@@ -33,4 +33,10 @@ public class Ban implements Command {
             gm.ban(target, Integer.parseInt(args[args.length-1]));
         }
     }
+
+    public String getDescription()
+    {
+        return "Bans a user  USAGE: >>ban <username>";
+    }
+
 }

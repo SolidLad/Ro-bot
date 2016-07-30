@@ -34,4 +34,9 @@ public class Queue implements Command {
                 .build();
         event.getTextChannel().sendMessage(msg);
     }
+
+    public String getDescription()
+    {
+        return "Displays the current song queue  USAGE: >>queue";
+    }
 }
