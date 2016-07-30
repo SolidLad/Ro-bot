@@ -38,11 +38,12 @@ public class Play implements Command {
             player.addEventListener(listener);
         }
 
-        if (source!=null)
+        if (source!=null&&source.getInfo().getDuration().getMinutes()<16){
+            player.getAudioQueue().add(source);
             event.getTextChannel().sendMessage(source.getInfo().getTitle()+" was added to the queue. Length `"+source.getInfo().getDuration().getTimestamp()+"`");
-        else event.getTextChannel().sendMessage("Invalid source. Please check the URL and try again.");
+        }
+        else event.getTextChannel().sendMessage("Invalid source. Either the video was longer than 15 minutes or the URL was invalid.");
 
-        player.getAudioQueue().add(source);
 
         if (!event.getGuild().getAudioManager().isConnected())
             event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());

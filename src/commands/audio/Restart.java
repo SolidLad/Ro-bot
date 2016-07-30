@@ -11,11 +11,8 @@ public class Restart implements Command {
         if (args.length!=1)
             throw new MalformedCommandException();
         MusicPlayer player =((MusicPlayer) event.getGuild().getAudioManager().getSendingHandler());
-        if (player.isStopped()) {
-            player.reload(true);
-            event.getTextChannel().sendMessage("Current song was restarted.");
-        }
-        else throw new MalformedCommandException();
+        player.reload(true);
+        event.getTextChannel().sendMessage("Current song was restarted.");
 
     }
 }

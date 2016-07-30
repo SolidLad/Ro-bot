@@ -21,7 +21,7 @@ public class Queue implements Command {
             return;
         }
         event.getTextChannel().sendMessage("Gathering information, this may take a moment.");
-        String str = player.getCurrentAudioSource().getInfo().getDuration().getTimestamp();
+        String str = "Title"+player.getCurrentAudioSource().getInfo().getTitle()+"`"+player.getCurrentAudioSource().getInfo().getDuration().getTimestamp()+"`";
         for (AudioSource source :
                 player.getAudioQueue()) {
             AudioInfo info = source.getInfo();

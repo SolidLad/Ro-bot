@@ -11,8 +11,10 @@ public class Shuffle implements Command {
         if (event.getGuild().getAudioManager().getSendingHandler() instanceof MusicPlayer){
             MusicPlayer player = (MusicPlayer) event.getGuild().getAudioManager().getSendingHandler();
             try {
+                if (!args[1].equalsIgnoreCase("true") && !args[1].equalsIgnoreCase("false"))
+                    throw new MalformedCommandException();
                 player.setShuffle(Boolean.valueOf(args[1].toLowerCase()));
-                event.getTextChannel().sendMessage("Shuffle was toggled to ["+args[1].toUpperCase()+"]");
+                event.getTextChannel().sendMessage("Shuffle was toggled to `"+args[1].toUpperCase()+"`");
             }
             catch (Exception e){
                 e.printStackTrace();

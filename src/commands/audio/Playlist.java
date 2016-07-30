@@ -32,8 +32,11 @@ public class Playlist implements Command {
             player.addEventListener(listener);
         }
         for (AudioSource source : sources) {
-            List<AudioSource> queue = player.getAudioQueue();
-            queue.add(source);
+            if (source.getInfo().getDuration().getMinutes()<16) {
+                List<AudioSource> queue = player.getAudioQueue();
+                queue.add(source);
+            }
+            else event.getTextChannel().sendMessage("A source was skipped because it was longer than 15 minutes");
         }
         if (!event.getGuild().getAudioManager().isConnected())
             event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
