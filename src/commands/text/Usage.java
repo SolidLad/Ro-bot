@@ -1,31 +1,153 @@
 package commands.text;
-
 import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
-import java.util.HashMap;
-import java.util.Map;
 
-public class Usage implements Command{
-    private Map<String, String> commandDescriptions = new HashMap<>();
-    private String[] commands = {"ban","deafen","dream","help","info","kick","mute","patrick","play","poll","record","roll","say","stop","unban","undeafen","unmute","usage","users"};
-    private String[] descriptions = {"Bans a user. Usage: ```>>ban <Username> <Days>```","Deafens a user. Usage: ```>>deafen <Username>```",
-            "Links a youtube video. Usage: ```>>dream```", "Displays a list of commands Usage: ```>>help```","Displays a user, server, or channel's info Usage: ```>>info <Target name>","Kicks a user. Usage: ```>>kick <Username>```","Mutes a user. Usage: ```>>mute <Username>```",
-            "Plays one of patrick's sounds. Usage: ```>>patrick <Sound>```","Plays a soundcloud track. Usage: ```>>play <Track URL> <int Channel> <Float volume>```",
-            "Creates a poll with up to twenty options. Usage: ```>>poll <Title>  <Option1> <Option2> <Option3> etc.","Starts/stops recording audio in a channel. Usage: ```>>record```"
-            ,"Rolls a six sided die or a die with a specified number of sides. Usage: ```>>roll <Sides>```", "Makes the bot say something. Usage: ```>>say <Message>```","Stops the currently play track and clears the queue.  Usage: ```>>stop```",
-            "Unbans a user. Usage: ```>>unban <Username>```", "Undeafens a user. Usage: ```>>undeafen <Username>```", "Unmutes a user. Usage: ```>>unmute <Username>```",
-            "Displays a command description and usage. Usage: ```>>usage <Command>```", "Prints a list of users and their online statuses. Usage: ```>>users```"
-    };
-    public Usage(){
-        for (int i = 0; i < commands.length; i++) {
-            commandDescriptions.put(commands[i], descriptions[i]);
+import java.io.File;
+import java.util.*;
+
+public class Usage implements Command
+{
+
+    private List<Command> desccommand = new ArrayList<Command>();
+
+    Map<String, String> commandsAndDescriptions = new HashMap<String, String>();
+
+    private String[] commands = {"Ban", "ChannelInfo", "ClearChannel", "CreatePoll", "Deafen", "Dream", "EndPoll", "Help", "Info", "Kick", "Mute", "Patrick", "Pause", "Play", "Playlist", "Queue", "Record", "Restart", "Resume", "Roll", "Say", "ServerInfo", "Shuffle", "Shutdown", "Skip", "Stats", "Stop", "Unban", "Undeafen", "Unmute", "commands.text.Usage", "Users", "UserInfo", "Volume", "Vote"};
+
+    //folder of commands
+    private File cmdfolder = new File("src/commands");
+
+    @Override
+    public void run(MessageReceivedEvent event, String[] args)
+    {
+
+            readFolder(cmdfolder, "");
+            for (int i = 0; i < commands.length; i++)
+            {
+                try
+                {
+                    boolean test = false;
+                    String x = desccommand.get(i).getDescription();
+                    String s = "";
+                    try
+                    {
+                        s = x.substring(x.indexOf(">")+2, x.indexOf("<")-1);
+                        test = true;
+                    }
+                    catch(Exception e)
+                    {
+                    }
+                    try
+                    {
+                        if(test == false)
+                        {
+                            if(x.indexOf(">") != -1)
+                            {
+                                s = x.substring(x.indexOf(">")+2);
+                            }
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                    }
+
+                    if(!s.equals(""))
+                    {
+                        for (int j = 0; j < commands.length; j++)
+                        {
+                            if((commands[j].toLowerCase()).equals(s))
+                            {
+                                commandsAndDescriptions.put(commands[j], x);
+                            }
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+
+        desccommand.clear();
+        String message;
+        if(args.length == 1)
+        {
+            message = createAns(commandsAndDescriptions);
+        }
+        else
+        {
+            message = "Invalid Command";
+            for (String key : commandsAndDescriptions.keySet())
+            {
+                if(key.toLowerCase().equals(args[1].toLowerCase()))
+                {
+                    message = key + "\t" + commandsAndDescriptions.get(key);
+                    break;
+                }
+            }
+
+        }
+        event.getTextChannel().sendMessage(message);
+        commandsAndDescriptions.clear();
+    }
+
+    public String createAns(Map x)
+    {
+        String answer = "";
+
+
+        for(String key : commandsAndDescriptions.keySet())
+        {
+            answer += key + "\t";
+            answer += commandsAndDescriptions.get(key) + "\n";
+        }
+
+        return answer;
+    }
+
+    public String getDescription()
+    {
+        return "Returns usages of commands";
+    }
+
+
+    //just copied and pasted from CommandHandler... It works I guess....
+
+    private void readFolder(File commandFolder, String parentFolderChain)
+    {
+        for(File subFile: commandFolder.listFiles())
+        {
+            // Make sure it is not a directory and make sure that it is a java class.
+            if(subFile.isFile() && subFile.toString().substring(subFile.toString().lastIndexOf(".") + 1).equals("java"))
+            {
+                try
+                {
+                    Class<?> tempClass = Class.forName(parentFolderChain + "." + commandFolder.getName() + "." + subFile.getName().substring(0,subFile.getName().indexOf(".")));
+                    Command tempCommand = (Command) tempClass.newInstance();
+                    desccommand.add(tempCommand);
+
+                }
+                catch (ClassNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (InstantiationException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+
+            else if(subFile.isDirectory() /*&& !isBanned(subFile)*/)
+            {
+                readFolder(subFile, parentFolderChain + commandFolder.getName());
+            }
         }
     }
-    @Override
-    public void run(MessageReceivedEvent event, String[] args) {
-        if (commandDescriptions.get(args[1])!=null)
-            event.getTextChannel().sendMessage(commandDescriptions.get(args[1]));
-        else event.getTextChannel().sendMessage("Command not recognized. Please enter commands in all lowercase letters.");
 
-    }
-}//
+}
