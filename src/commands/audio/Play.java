@@ -1,17 +1,13 @@
 package commands.audio;
-
-import com.google.api.client.json.Json;
 import eventlisteners.PlayerEventListener;
 import exceptions.MalformedCommandException;
 import net.dv8tion.jda.managers.AudioManager;
 import net.dv8tion.jda.player.MusicPlayer;
 import net.dv8tion.jda.player.source.AudioSource;
 import net.dv8tion.jda.player.source.RemoteSource;
-import org.json.JSONObject;
 import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import utils.FileIO;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
