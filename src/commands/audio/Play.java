@@ -31,7 +31,7 @@ public class Play implements Command {
             throw new MalformedCommandException();
         if (!args[1].startsWith("https://www.youtube.com/watch?v=")){
             try {
-                InputStream in = new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&q="+compileString(args)+"&type=video&key="+FileIO.readFile("yt.secret")).openStream();
+                InputStream in = new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&q="+compileString(args).replace(" ", "+")+"&type=video&key="+FileIO.readFile("yt.secret")).openStream();
                 int i;
                 char c;
                 String str = "";
