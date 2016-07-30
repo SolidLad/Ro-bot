@@ -3,7 +3,6 @@ package commands.audio;
 import exceptions.MalformedCommandException;
 import net.dv8tion.jda.player.MusicPlayer;
 import utils.Command;
-import utils.ServerPackage;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class Stop implements Command {
@@ -16,6 +15,7 @@ public class Stop implements Command {
                 player.getAudioQueue().clear();
                 player.stop();
                 event.getGuild().getAudioManager().closeAudioConnection();
+                event.getTextChannel().sendMessage("Successfully cleared the queue, stopped playback, and closed the connection.");
             }
             else {
                 throw new MalformedCommandException();

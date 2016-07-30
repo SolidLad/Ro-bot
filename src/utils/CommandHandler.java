@@ -6,7 +6,7 @@ import java.util.Map;
 public class CommandHandler {
 
     private String commandFolderPath = "src/commands";
-    private String[] bannedFolders = new String[] {"utils", "custom"};
+    private String[] bannedFolders = new String[] {"utils", "blacklist"};
     private File commandFolder;
     public static Map<String, Command> commands = new HashMap<>();
 
@@ -15,7 +15,6 @@ public class CommandHandler {
         if(commandFolder.isDirectory()) {
             readFolder(commandFolder, "");
         }
-        ServerPackage.commands = commands;
     }
 
     private void readFolder(File commandFolder, String parentFolderChain) {

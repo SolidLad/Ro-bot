@@ -1,12 +1,11 @@
 package utils;
-
-import net.dv8tion.jda.entities.Guild;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class FileIO {
@@ -33,7 +32,11 @@ public class FileIO {
     public static void writeLog(String path, String msg) {
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(new File(path),true));
+            File file = new File(path);
+            file.getParentFile().mkdirs();
+            if (file.createNewFile())
+                BotLogger.log(BotLogger.INFO, "log was created at: "+ path);
+            writer = new BufferedWriter(new FileWriter(file,true));
             writer.write(msg+"\n");
         } catch (Exception e) {
             e.printStackTrace();

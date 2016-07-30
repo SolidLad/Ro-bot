@@ -14,7 +14,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class Record implements Command{
+    private int iterations = 0;
     private byte[] data;
+    private String[] args;
+    private MessageReceivedEvent event;
     private AudioReceiveHandler handler = new AudioReceiveHandler() {
         @Override
         public boolean canReceiveCombined() {
@@ -28,6 +31,12 @@ public class Record implements Command{
         public void handleCombinedAudio(CombinedAudio combinedAudio) {
             byte[] pcm = combinedAudio.getAudioData(1.0D);
             data = ArrayUtils.addAll(data, pcm);
+            iterations++;
+            if (iterations>15000)
+                {
+                    event.getGuild().getAudioManager().setReceivingHandler(null);
+                    endRecording(event);
+                }
         }
 
         @Override
@@ -41,21 +50,15 @@ public class Record implements Command{
     };
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
+        this.event = event;
+        this.args = args;
         if (!event.getGuild().getAudioManager().isConnected()) {
             event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
             event.getGuild().getAudioManager().setReceivingHandler(handler);
             data = new byte[] {};
         }
         else {
-            try {
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
-                AudioInputStream audioInputStream = new AudioInputStream(byteArrayInputStream, AudioReceiveHandler.OUTPUT_FORMAT, data.length);
-                File file = new File("res\\test.wav");
-                new WaveAudioFileWriter().write(audioInputStream, AudioFileFormat.Type.WAVE, file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            endRecording(event);
             event.getGuild().getAudioManager().closeAudioConnection();
             event.getGuild().getAudioManager().setReceivingHandler(new AudioReceiveHandler() {
                 @Override
@@ -85,5 +88,18 @@ public class Record implements Command{
                 }
             });
         }
+        iterations = 0;
+    }
+    public void endRecording(MessageReceivedEvent event){
+        try {
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+            AudioInputStream audioInputStream = new AudioInputStream(byteArrayInputStream, AudioReceiveHandler.OUTPUT_FORMAT, data.length);
+            File file = new File("guild\\"+event.getGuild().getName()+event.getGuild().getId()+"fileID"+System.nanoTime()+".wav");
+            file.getParentFile().mkdirs();
+            new WaveAudioFileWriter().write(audioInputStream, AudioFileFormat.Type.WAVE, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

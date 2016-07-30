@@ -1,7 +1,7 @@
 package commands.text;
 
 import utils.Command;
-import utils.ServerPackage;
+import utils.CommandHandler;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 import java.util.Set;
@@ -10,7 +10,7 @@ public class Help implements Command {
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) {
-        Set keys = ServerPackage.commands.keySet();
+        Set keys = CommandHandler.commands.keySet();
         String commands = "Commands: ```";
         for(Object key: keys) {
             commands += key.toString() + "\n";

@@ -2,8 +2,7 @@ package commands.text;
 
 import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
-import utils.CommandHandler;
-import utils.MessageListener;
+import eventlisteners.MessageListener;
 
 public class Stats implements Command{
     private long startTime;

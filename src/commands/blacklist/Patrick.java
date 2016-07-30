@@ -1,4 +1,4 @@
-package commands.audio;
+package commands.blacklist;
 
 import utils.BotLogger;
 import utils.Command;
@@ -64,6 +64,7 @@ public class Patrick implements Command {
                             @Override
                             public void run() {
                                 event.getGuild().getAudioManager().closeAudioConnection();
+                                event.getGuild().getAudioManager().setSendingHandler(null);
                             }
                         }, ((((int) durationInSeconds)*1000+5000)));
                     }

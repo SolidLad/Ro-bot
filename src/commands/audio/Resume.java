@@ -14,5 +14,6 @@ public class Resume implements Command {
         if (player.isStopped())
             throw new MalformedCommandException();
         player.play();
+        event.getTextChannel().sendMessage("Playback was resumed");
     }
 }

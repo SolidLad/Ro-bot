@@ -11,7 +11,9 @@ public class Pause implements Command {
         if (args.length!=1)
             throw new MalformedCommandException();
         MusicPlayer player =((MusicPlayer) event.getGuild().getAudioManager().getSendingHandler());
-        if (player.isPlaying())
+        if (player.isPlaying()) {
             player.pause();
+            event.getTextChannel().sendMessage("Playback has been successfully paused.");
+        }
     }
 }
