@@ -18,7 +18,7 @@ import java.util.List;
 public class Play implements Command {
     private PlayerEventListener listener;
     private AudioSource source;
-    private static final List<String> YOUTUBE_DL_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("C:\\Python27\\python.exe", "youtube-dl", "-q", "-f", "bestaudio/best", "--no-playlist", "-o", "-"));
+    private static final List<String> YOUTUBE_DL_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("C:\\Program Files\\Python27\\python.exe", "youtube-dl", "-q", "-f", "bestaudio/best", "--no-playlist", "-o", "-"));
     private static final List<String> FFMPEG_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("ffmpeg.exe", "-i", "-", "-f", "s16be", "-ac", "2", "-ar", "48000", "-map", "a", "-"));
 
     @Override
@@ -27,7 +27,7 @@ public class Play implements Command {
             throw new MalformedCommandException();
         if (!args[1].startsWith("https://www.youtube.com/watch?v=")){
             try {
-                InputStream in = new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&q="+compileString(args).replace(" ", "+")+"&type=video&key="+FileIO.readFile("yt.secret")).openStream();
+                InputStream in = new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&order=relevance&fields=items(id)&q="+compileString(args).replace(" ", "+")+"&key="+FileIO.readFile("yt.secret")).openStream();
                 int i;
                 char c;
                 String str = "";
