@@ -1,4 +1,5 @@
 package commands.text;
+import exceptions.MalformedCommandException;
 import utils.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
@@ -18,8 +19,7 @@ public class Usage implements Command
     private File cmdfolder = new File("src/commands");
 
     @Override
-    public void run(MessageReceivedEvent event, String[] args)
-    {
+    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
 
             readFolder(cmdfolder, "");
             for (int i = 0; i < commands.length; i++)
@@ -27,11 +27,11 @@ public class Usage implements Command
                 try
                 {
                     boolean test = false;
-                    String x = desccommand.get(i).getDescription();
+                    String description = desccommand.get(i).getDescription();
                     String s = "";
                     try
                     {
-                        s = x.substring(x.indexOf(">")+2, x.indexOf("<")-1);
+                        s = description.substring(description.indexOf(">")+2, description.indexOf("<")-1);
                         test = true;
                     }
                     catch(Exception e)
@@ -39,11 +39,11 @@ public class Usage implements Command
                     }
                     try
                     {
-                        if(test == false)
+                        if(!test)
                         {
-                            if(x.indexOf(">") != -1)
+                            if(description.contains(">"))
                             {
-                                s = x.substring(x.indexOf(">")+2);
+                                s = description.substring(description.indexOf(">")+2);
                             }
                         }
                     }
@@ -53,27 +53,24 @@ public class Usage implements Command
 
                     if(!s.equals(""))
                     {
-                        for (int j = 0; j < commands.length; j++)
-                        {
-                            if((commands[j].toLowerCase()).equals(s))
-                            {
-                                commandsAndDescriptions.put(commands[j], x);
+                        for (String command : commands) {
+                            if ((command.toLowerCase()).equals(s)) {
+                                commandsAndDescriptions.put(command, description);
                             }
                         }
                     }
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace();
                 }
             }
 
 
         desccommand.clear();
         String message;
-        if(args.length == 1)
+        if(args.length == 2)
         {
-            message = createAns(commandsAndDescriptions);
+            message = createAns(commandsAndDescriptions, args);
         }
         else
         {
@@ -88,21 +85,25 @@ public class Usage implements Command
             }
 
         }
-        event.getTextChannel().sendMessage(message);
+        if (!message.equals(""))
+            event.getTextChannel().sendMessage("`"+message+"`");
+        else event.getTextChannel().sendMessage("Invalid usage command. Usage: `>>usage <Command>`\nTry `>>help` for a list of commands.");
         commandsAndDescriptions.clear();
     }
 
-    public String createAns(Map x)
-    {
+    public String createAns(Map<String, String> map, String[] args) throws MalformedCommandException {
         String answer = "";
 
 
-        for(String key : commandsAndDescriptions.keySet())
+        for(String key : map.keySet())
         {
-            answer += key + "\t";
-            answer += commandsAndDescriptions.get(key) + "\n";
+            if (key.equalsIgnoreCase(args[1].toLowerCase())) {
+                answer += key + "\t";
+                answer += map.get(key) + "\n";
+            }
         }
-
+        if (answer.equals("``"))
+            throw new MalformedCommandException();
         return answer;
     }
 
@@ -128,15 +129,7 @@ public class Usage implements Command
                     desccommand.add(tempCommand);
 
                 }
-                catch (ClassNotFoundException e)
-                {
-                    e.printStackTrace();
-                }
-                catch (InstantiationException e)
-                {
-                    e.printStackTrace();
-                }
-                catch (IllegalAccessException e)
+                catch (ClassNotFoundException | IllegalAccessException | InstantiationException e)
                 {
                     e.printStackTrace();
                 }
