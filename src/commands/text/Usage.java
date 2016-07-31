@@ -13,12 +13,11 @@ public class Usage implements Command
 
     Map<String, String> commandsAndDescriptions = new HashMap<String, String>();
 
-    private String[] commands = {"Ban", "ChannelInfo", "ClearChannel", "CreatePoll", "Deafen", "Dream", "EndPoll", "Help", "Info", "Kick", "Mute", "Patrick", "Pause", "Play", "Playlist", "Queue", "Record", "Restart", "Resume", "Roll", "Say", "ServerInfo", "Shuffle", "Shutdown", "Skip", "Stats", "Stop", "Unban", "Undeafen", "Unmute", "commands.text.Usage", "Users", "UserInfo", "Volume", "Vote"};
+    private final String[] commands = {"Ban", "ChannelInfo", "ClearChannel", "CreatePoll", "Deafen", "Dream", "EndPoll", "Help", "Info", "Kick", "Mute", "Patrick", "Pause", "Play", "Playlist", "Queue", "Record", "Restart", "Resume", "Roll", "Say", "ServerInfo", "Shuffle", "Shutdown", "Skip", "Stats", "Stop", "Unban", "Undeafen", "Unmute", "commands.text.Usage", "Users", "UserInfo", "Volume", "Vote"};
 
     private File commandFolder = new File("src/commands");
 
-    @Override
-    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException
+    public Usage()
     {
         readFolder(commandFolder, "");
 
@@ -41,7 +40,7 @@ public class Usage implements Command
                 }
                 catch(Exception e)
                 {
-                   //if the command doesn't have parameters, it will throw an exception, due to not having a "<" character, giving a negative index
+                    //if the command doesn't have parameters, it will throw an exception, due to not having a "<" character, giving a negative index
                 }
                 //prevents double assigning of the commandName variable
                 if(!hasInstanceFields)
@@ -75,7 +74,11 @@ public class Usage implements Command
 
         //once the hashmap of commands and descriptions is filled, the memory of the commandList is cleared
         commandList.clear();
+    }
 
+    @Override
+    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException
+    {
         String message = "";
         //checking if the user provides the correct command syntax
         if(args.length > 1)
@@ -93,8 +96,6 @@ public class Usage implements Command
         {
             event.getTextChannel().sendMessage("Invalid usage command. Usage: `>>usage <Command>`\nTry `>>help` for a list of commands.");
         }
-
-        commandsAndDescriptions.clear();
     }
 
     public String createResponse(Map<String, String> map, String[] args)
