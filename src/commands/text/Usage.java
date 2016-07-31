@@ -9,101 +9,108 @@ import java.util.*;
 public class Usage implements Command
 {
 
-    private List<Command> desccommand = new ArrayList<Command>();
+    private List<Command> commandList = new ArrayList<Command>();
 
     Map<String, String> commandsAndDescriptions = new HashMap<String, String>();
 
     private String[] commands = {"Ban", "ChannelInfo", "ClearChannel", "CreatePoll", "Deafen", "Dream", "EndPoll", "Help", "Info", "Kick", "Mute", "Patrick", "Pause", "Play", "Playlist", "Queue", "Record", "Restart", "Resume", "Roll", "Say", "ServerInfo", "Shuffle", "Shutdown", "Skip", "Stats", "Stop", "Unban", "Undeafen", "Unmute", "commands.text.Usage", "Users", "UserInfo", "Volume", "Vote"};
 
-    //folder of commands
-    private File cmdfolder = new File("src/commands");
+    private File commandFolder = new File("src/commands");
 
     @Override
-    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
+    public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException
+    {
+        readFolder(commandFolder, "");
 
-            readFolder(cmdfolder, "");
-            for (int i = 0; i < commands.length; i++)
+        for (int i = 0; i < commands.length; i++)
+        {
+            try
             {
+                boolean hasInstanceFields = false;
+                String description = commandList.get(i).getDescription();
+
+                String commandName = "";
+
+                //this section is trying to grab the command name, in order to pair each description with each command name
                 try
                 {
-                    boolean test = false;
-                    String description = desccommand.get(i).getDescription();
-                    String s = "";
-                    try
-                    {
-                        s = description.substring(description.indexOf(">")+2, description.indexOf("<")-1);
-                        test = true;
-                    }
-                    catch(Exception e)
-                    {
-                    }
-                    try
-                    {
-                        if(!test)
-                        {
-                            if(description.contains(">"))
-                            {
-                                s = description.substring(description.indexOf(">")+2);
-                            }
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                    }
-
-                    if(!s.equals(""))
-                    {
-                        for (String command : commands) {
-                            if ((command.toLowerCase()).equals(s)) {
-                                commandsAndDescriptions.put(command, description);
-                            }
-                        }
-                    }
+                    //if it has parameters it will have a "<" character
+                    commandName = description.substring(description.indexOf(">")+2, description.indexOf("<")-1);
+                    //this boolean prevents the variable from changing in the next line
+                    hasInstanceFields = true;
                 }
                 catch(Exception e)
                 {
+                   //if the command doesn't have parameters, it will throw an exception, due to not having a "<" character, giving a negative index
+                }
+                //prevents double assigning of the commandName variable
+                if(!hasInstanceFields)
+                {
+                    //functions that are not shown or are for debugging won't have a ">" as there is no usage example
+                    if(description.contains(">"))
+                    {
+                        //this is for commands that have no parameters
+                        commandName = description.substring(description.indexOf(">")+2);
+                    }
+                }
+
+                //making sure we aren't adding empty debug or testing commands
+                if(!commandName.equals(""))
+                {
+                    for (String command : commands)
+                    {
+                        //matches a command with its description
+                        if ((command.toLowerCase()).equals(commandName))
+                        {
+                            commandsAndDescriptions.put(command, description);
+                        }
+                    }
                 }
             }
-
-
-        desccommand.clear();
-        String message;
-        if(args.length == 2)
-        {
-            message = createAns(commandsAndDescriptions, args);
+            catch(Exception e)
+            {
+                //meh, this should work
+            }
         }
+
+        //once the hashmap of commands and descriptions is filled, the memory of the commandList is cleared
+        commandList.clear();
+
+        String message = "";
+        //checking if the user provides the correct command syntax
+        if(args.length > 1)
+        {
+            message = createResponse(commandsAndDescriptions, args);
+        }
+
+        //checks for null message and sends if not null
+        if (!message.equals(""))
+        {
+            event.getTextChannel().sendMessage("`"+message+"`");
+        }
+        //otherwise gives invalid usage command
         else
         {
-            message = "Invalid Command";
-            for (String key : commandsAndDescriptions.keySet())
-            {
-                if(key.toLowerCase().equals(args[1].toLowerCase()))
-                {
-                    message = key + "\t" + commandsAndDescriptions.get(key);
-                    break;
-                }
-            }
-
+            event.getTextChannel().sendMessage("Invalid usage command. Usage: `>>usage <Command>`\nTry `>>help` for a list of commands.");
         }
-        if (!message.equals(""))
-            event.getTextChannel().sendMessage("`"+message+"`");
-        else event.getTextChannel().sendMessage("Invalid usage command. Usage: `>>usage <Command>`\nTry `>>help` for a list of commands.");
+
         commandsAndDescriptions.clear();
     }
 
-    public String createAns(Map<String, String> map, String[] args) throws MalformedCommandException {
+    public String createResponse(Map<String, String> map, String[] args)
+    {
         String answer = "";
-
 
         for(String key : map.keySet())
         {
-            if (key.equalsIgnoreCase(args[1].toLowerCase())) {
+            if (key.equalsIgnoreCase(args[1].toLowerCase()))
+            {
                 answer += key + "\t";
                 answer += map.get(key) + "\n";
+                break;
             }
         }
-        if (answer.equals("``"))
-            throw new MalformedCommandException();
+
         return answer;
     }
 
@@ -111,9 +118,6 @@ public class Usage implements Command
     {
         return "Returns usages of commands";
     }
-
-
-    //just copied and pasted from CommandHandler... It works I guess....
 
     private void readFolder(File commandFolder, String parentFolderChain)
     {
@@ -126,7 +130,7 @@ public class Usage implements Command
                 {
                     Class<?> tempClass = Class.forName(parentFolderChain + "." + commandFolder.getName() + "." + subFile.getName().substring(0,subFile.getName().indexOf(".")));
                     Command tempCommand = (Command) tempClass.newInstance();
-                    desccommand.add(tempCommand);
+                    commandList.add(tempCommand);
 
                 }
                 catch (ClassNotFoundException | IllegalAccessException | InstantiationException e)
