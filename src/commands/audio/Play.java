@@ -26,22 +26,31 @@ public class Play implements Command {
         if (args.length<2)
             throw new MalformedCommandException();
         if (!args[1].startsWith("https://www.youtube.com/watch?v=")){
-            try {
-                InputStream in = new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&order=relevance&fields=items(id)&q="+compileString(args).replace(" ", "+")+"&key="+FileIO.readFile("yt.secret")).openStream();
-                int i;
-                char c;
-                String str = "";
-                while((i=in.read())!=-1)
-                {
-                    c=(char)i;
-                    str+=c;
+            if (args.length==2&&(args[1].startsWith("http://")||args[1].startsWith("https://"))) {
+                try {
+                    source = new RemoteSource(args[1]);
                 }
-                str = str.substring(str.indexOf("video")+24,str.indexOf("video")+35);
-                in.close();
-                str = "https://www.youtube.com/watch?v="+str;
-                source = new RemoteSource(str, YOUTUBE_DL_LAUNCH_ARGS, FFMPEG_LAUNCH_ARGS);
-            } catch (IOException e) {
-                e.printStackTrace();
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    InputStream in = new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&order=relevance&fields=items(id)&q=" + compileString(args).replace(" ", "+") + "&key=" + FileIO.readFile("yt.secret")).openStream();
+                    int i;
+                    char c;
+                    String str = "";
+                    while ((i = in.read()) != -1) {
+                        c = (char) i;
+                        str += c;
+                    }
+                    str = str.substring(str.indexOf("video") + 24, str.indexOf("video") + 35);
+                    in.close();
+                    str = "https://www.youtube.com/watch?v=" + str;
+                    source = new RemoteSource(str, YOUTUBE_DL_LAUNCH_ARGS, FFMPEG_LAUNCH_ARGS);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (source==null)
@@ -88,6 +97,6 @@ public class Play implements Command {
 
     public String getDescription()
     {
-        return "Plays either a youtube video or soundcloud song. If a string is provided instead of a link, the bot will search and play the first result  USAGE: >>play <link>";
+        return "Attempts to play audio from this list of supported sites https://rg3.github.io/youtube-dl/supportedsites.html NOTE: some of those may not work. If a string is provided instead of a link, the bot will search and play the first result  USAGE: >>play <link>";
     }
 }
