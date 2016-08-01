@@ -10,8 +10,8 @@ public class Volume implements Command{
         try {
             if (event.getGuild().getAudioManager().getSendingHandler()!=null) {
                 MusicPlayer player = (MusicPlayer) event.getGuild().getAudioManager().getSendingHandler();
-                if (Float.valueOf(args[1])>1.0)
-                    args[1] = "1.0";
+                if (Float.valueOf(args[1])>3.0)
+                    args[1] = "3.0";
                 else if (Float.valueOf(args[1])<0.0)
                     args[1] = "0.0";
                 player.setVolume(Float.valueOf(args[1]));
@@ -26,8 +26,9 @@ public class Volume implements Command{
 
     }
 
+
     public String getDescription()
     {
-        return "Sets the volume of music  >>volume <level>";
+        return "Sets the volume of music  **volume <level>";
     }
 }

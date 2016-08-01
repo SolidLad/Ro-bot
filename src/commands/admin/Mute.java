@@ -34,7 +34,7 @@ public class Mute implements Command {
 
     public String getDescription()
     {
-        return "Mutes a user  USAGE: >>mute <username>";
+        return "Mutes a user  USAGE: **mute <username>";
     }
 
 }

@@ -35,6 +35,6 @@ public class Undeafen implements Command{
 
     public String getDescription()
     {
-        return "Undeafens a user  USAGE: >>undeafen <username>";
+        return "Undeafens a user  USAGE: **undeafen <username>";
     }
 }

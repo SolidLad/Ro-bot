@@ -5,8 +5,8 @@ import exceptions.MalformedCommandException;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 import net.dv8tion.jda.player.MusicPlayer;
+import net.dv8tion.jda.player.source.AudioInfo;
 import net.dv8tion.jda.player.source.AudioSource;
-import net.dv8tion.jda.player.source.RemoteSource;
 import utils.Command;
 
 import java.util.*;
@@ -31,12 +31,22 @@ public class Playlist implements Command {
             listener = new PlayerEventListener(event.getGuild(), event.getTextChannel());
             player.addEventListener(listener);
         }
+        event.getTextChannel().sendMessage("Gathering information, this may take some time.");
         for (AudioSource source : sources) {
-            if (source.getInfo().getDuration().getMinutes()<16) {
+            try {
+                AudioInfo info = source.getInfo();
+                System.out.println(info.getError());
                 List<AudioSource> queue = player.getAudioQueue();
-                queue.add(source);
+                if (info.getError()==null){
+                    if (info.getDuration().getMinutes() < 16) {
+                        queue.add(source);
+                }
+                } else
+                    event.getTextChannel().sendMessage("A source was skipped because it caused an error or was longer than 15 minutes.");
             }
-            else event.getTextChannel().sendMessage("A source was skipped because it was longer than 15 minutes");
+            catch (NullPointerException e){
+                e.printStackTrace();
+            }
         }
         if (!event.getGuild().getAudioManager().isConnected())
             event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
@@ -46,6 +56,6 @@ public class Playlist implements Command {
 
     public String getDescription()
     {
-        return "Plays a playlist from youtube  USAGE: >>playlist <link>";
+        return "Plays a playlist from youtube  USAGE: **playlist <link>";
     }
 }

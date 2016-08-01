@@ -40,7 +40,7 @@ public class UserInfo implements Command {
 
     public String getDescription()
     {
-        return "Returns info about a user  USAGE: >>userinfo <username>";
+        return "Returns info about a user  USAGE: **userinfo <username>";
     }
 
 }

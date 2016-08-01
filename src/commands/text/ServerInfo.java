@@ -22,6 +22,6 @@ public class ServerInfo implements Command{
 
     public String getDescription()
     {
-        return "Prints info about the server  USAGE: >>serverinfo";
+        return "Prints info about the server  USAGE: **serverinfo";
     }
 }

@@ -18,6 +18,6 @@ public class Restart implements Command {
 
     public String getDescription()
     {
-        return "Restarts a song that's playing  USAGE: >>restart";
+        return "Restarts a song that's playing  USAGE: **restart";
     }
 }

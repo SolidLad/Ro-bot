@@ -21,6 +21,6 @@ public class Stats implements Command{
 
     public String getDescription()
     {
-        return "Returns stats about server  USAGE: >>stats";
+        return "Returns stats about server  USAGE: **stats";
     }
 }

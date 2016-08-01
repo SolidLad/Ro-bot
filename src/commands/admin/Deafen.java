@@ -35,6 +35,6 @@ public class Deafen implements Command{
 
     public String getDescription()
     {
-        return "Deafens a user  USAGE: >>deafen <username>";
+        return "Deafens a user  USAGE: **deafen <username>";
     }
 }

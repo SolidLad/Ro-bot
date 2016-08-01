@@ -37,7 +37,7 @@ public class Unban implements Command {
 
     public String getDescription()
     {
-        return "Unbans user from server  USAGE: >>unban <username>";
+        return "Unbans user from server  USAGE: **unban <username>";
     }
 
 }

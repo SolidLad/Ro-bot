@@ -52,6 +52,6 @@ public class ChannelInfo implements Command {
 
     public String getDescription()
     {
-        return "Returns info about the channel  USAGE: >>channelinfo <channelname>";
+        return "Returns info about the channel  USAGE: **channelinfo <channelname>";
     }
 }

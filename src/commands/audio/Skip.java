@@ -33,6 +33,6 @@ public class Skip implements Command{
 
     public String getDescription()
     {
-        return "Skips the current playing song  USAGE: >>skip";
+        return "Skips the current playing song  USAGE: **skip";
     }
 }

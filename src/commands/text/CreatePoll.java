@@ -139,6 +139,6 @@ public class CreatePoll implements Command {
 
     public String getDescription()
     {
-        return "Creates a poll USAGE: >>createpoll <option> <option> <option>....";
+        return "Creates a poll USAGE: **createpoll <option> <option> <option>....";
     }
 }

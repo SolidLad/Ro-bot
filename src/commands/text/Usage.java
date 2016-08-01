@@ -38,11 +38,11 @@ public class Usage implements Command {
         //otherwise gives invalid usage command
         else
         {
-            event.getTextChannel().sendMessage("Invalid usage command. Usage: `>>usage <Command>`\nTry `>>help` for a list of commands.");
+            event.getTextChannel().sendMessage("Invalid usage command. Usage: `**usage <Command>`\nTry `**help` for a list of commands.");
         }
     }
     public String getDescription()
     {
-        return "Returns usages of commands";
+        return "Returns the usage of a specific command.";
     }
 }

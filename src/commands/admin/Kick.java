@@ -26,6 +26,6 @@ public class Kick implements Command {
 
     public String getDescription()
     {
-        return "Kicks a user from the server  USAGE: >>kick <username>";
+        return "Kicks a user from the server  USAGE: **kick <username>";
     }
 }

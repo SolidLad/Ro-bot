@@ -26,6 +26,6 @@ public class Shuffle implements Command {
 
     public String getDescription()
     {
-        return "Shuffles songs    USAGE: >>shuffle";
+        return "Shuffles songs    USAGE: **shuffle";
     }
 }

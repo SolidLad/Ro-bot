@@ -37,6 +37,6 @@ public class Queue implements Command {
 
     public String getDescription()
     {
-        return "Displays the current song queue  USAGE: >>queue";
+        return "Displays the current song queue  USAGE: **queue";
     }
 }

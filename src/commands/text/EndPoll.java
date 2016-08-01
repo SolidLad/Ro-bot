@@ -14,6 +14,6 @@ public class EndPoll implements Command {
 
     public String getDescription()
     {
-        return "Ends a poll  USAGE: >>endpoll";
+        return "Ends a poll  USAGE: **endpoll";
     }
 }

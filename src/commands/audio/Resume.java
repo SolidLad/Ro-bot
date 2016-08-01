@@ -19,6 +19,6 @@ public class Resume implements Command {
 
     public String getDescription()
     {
-        return "Resumes a paused song  USAGE: >>resume";
+        return "Resumes a paused song  USAGE: **resume";
     }
 }

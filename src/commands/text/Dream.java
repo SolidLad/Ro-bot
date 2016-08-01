@@ -9,6 +9,6 @@ public class Dream implements Command {
     }
     public String getDescription()
     {
-        return "Prints a funny message  USAGE: >>dream";
+        return "Prints a funny message  USAGE: **dream";
     }
 }

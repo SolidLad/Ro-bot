@@ -25,6 +25,6 @@ public class Roll implements Command {
     }
     public String getDescription()
     {
-        return "Rolls a dice and prints result  USAGE: >>roll <sides>";
+        return "Rolls a dice and prints result  USAGE: **roll <sides>";
     }
 }

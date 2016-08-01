@@ -36,7 +36,7 @@ public class Ban implements Command {
 
     public String getDescription()
     {
-        return "Bans a user  USAGE: >>ban <username>";
+        return "Bans a user  USAGE: **ban <username>";
     }
 
 }

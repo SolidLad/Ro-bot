@@ -19,6 +19,6 @@ public class Shutdown implements Command {
 
     public String getDescription()
     {
-        return "Shuts the bot down  USAGE: >>shutdown <key>";
+        return "Shuts the bot down  USAGE: **shutdown <key>";
     }
 }

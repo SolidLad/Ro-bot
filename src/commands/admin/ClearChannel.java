@@ -12,7 +12,7 @@ public class ClearChannel implements Command
     @Override
     public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException
     {
-        if (args.length!=2|| !args[1].equalsIgnoreCase("iAcceptTheConsequences"))
+        if (args.length!=2|| !args[1].equalsIgnoreCase("iAmCertain"))
             throw new MalformedCommandException();
         else {
             Timer timer = new Timer();
@@ -38,7 +38,7 @@ public class ClearChannel implements Command
 
     public String getDescription()
     {
-        return "Clears a chat channel  USAGE: >>clearchannel <iAcceptTheConsequences>";
+        return "Clears a chat channel  USAGE: **clearchannel iamcertain";
     }
 
 }

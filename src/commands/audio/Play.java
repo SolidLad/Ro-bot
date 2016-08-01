@@ -77,7 +77,7 @@ public class Play implements Command {
         else event.getTextChannel().sendMessage("Invalid source. Either the video was longer than 15 minutes or the URL was invalid.");
 
 
-        if (!event.getGuild().getAudioManager().isConnected())
+        if (!event.getGuild().getAudioManager().isConnected()&&event.getGuild().getAudioManager().getQueuedAudioConnection()==null)
             event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getVoiceStatusOfUser(event.getAuthor()).getChannel());
         if (player.isStopped()&& !player.isPlaying())
             player.play();
@@ -97,6 +97,6 @@ public class Play implements Command {
 
     public String getDescription()
     {
-        return "Attempts to play audio from this list of supported sites https://rg3.github.io/youtube-dl/supportedsites.html NOTE: some of those may not work. If a string is provided instead of a link, the bot will search and play the first result  USAGE: >>play <link>";
+        return "Attempts to play audio from this list of supported sites https://rg3.github.io/youtube-dl/supportedsites.html NOTE: some of those may not work. If a string is provided instead of a link, the bot will search and play the first result  USAGE: **play <link>";
     }
 }

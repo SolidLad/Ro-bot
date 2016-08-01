@@ -17,6 +17,6 @@ public class Users implements Command {
 
     public String getDescription()
     {
-        return "Lists all users  USAGE: >>users";
+        return "Lists all users  USAGE: **users";
     }
 }

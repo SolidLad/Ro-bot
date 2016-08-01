@@ -19,6 +19,6 @@ public class Pause implements Command {
 
     public String getDescription()
     {
-        return "Pauses current song  USAGE: >>pause";
+        return "Pauses current song  USAGE: **pause";
     }
 }

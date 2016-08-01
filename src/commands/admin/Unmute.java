@@ -35,6 +35,6 @@ public class Unmute implements Command{
 
     public String getDescription()
     {
-        return "Unmutes a user  USAGE: >>unmute <username>";
+        return "Unmutes a user  USAGE: **unmute <username>";
     }
 }

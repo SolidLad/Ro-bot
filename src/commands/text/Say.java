@@ -40,6 +40,6 @@ public class Say implements Command {
 
     public String getDescription()
     {
-        return "Makes bot repeat what you say  USAGE: >>say <guildid> <message>";
+        return "Makes bot repeat what you say  USAGE: **say <guildid> <message>";
     }
 }
