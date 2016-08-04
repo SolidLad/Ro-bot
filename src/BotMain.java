@@ -1,3 +1,5 @@
+import eventlisteners.JoinListener;
+import eventlisteners.ReadyListener;
 import net.dv8tion.jda.JDABuilder;
 import utils.FileIO;
 import eventlisteners.MessageListener;
@@ -13,6 +15,8 @@ public class BotMain {
         {
             new JDABuilder()
                     .setBotToken(token.replaceAll("\n", ""))
+                    .addListener(new ReadyListener())
+                    .addListener(new JoinListener())
                     .addListener(new MessageListener())
                     .setBulkDeleteSplittingEnabled(false)
                     .buildBlocking();

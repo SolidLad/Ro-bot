@@ -12,30 +12,36 @@ public class Say implements Command {
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
-        if (!event.getMessage().isPrivate()) {
-            event.getTextChannel().sendMessage(compileString(args));
-            event.getMessage().deleteMessage();
-        }
-        else {
-            List<Guild> sharedGuilds = event.getJDA().getGuilds().parallelStream().filter(g -> g.getUsers().contains(event.getAuthor())).collect(Collectors.toList());
-            Guild target = event.getJDA().getGuildById(args[1]);
-            if (sharedGuilds.contains(target)){
-                args[1] = "";
-                target.getTextChannels().get(0).sendMessage(compileString(args));
+        new Thread(() ->{
+            String msg = compileString(args);
+            if (msg!=null) {
+                if (!event.getMessage().isPrivate()) {
+                    event.getTextChannel().sendMessage(msg);
+                } else {
+                    List<Guild> sharedGuilds = event.getJDA().getGuilds().parallelStream().filter(g -> g.getUsers().contains(event.getAuthor())).collect(Collectors.toList());
+                    Guild target = event.getJDA().getGuildById(args[1]);
+                    if (sharedGuilds.contains(target)) {
+                        target.getTextChannels().get(0).sendMessage(msg);
+                    }
+                }
             }
-        }
+        }).run();
+
     }
 
-    private String compileString(String[] args) throws MalformedCommandException {
+    private String compileString(String[] args) {
         if(args.length >= 2) {
             String finalString = "";
             for (int i = 1; i < args.length; i++) {
                 finalString += args[i] + " ";
             }
             return finalString;
-        } else {
-            throw new MalformedCommandException();
         }
+        return null;
+    }
+    @Override
+    public String level() {
+        return "Admin";
     }
 
     public String getDescription()

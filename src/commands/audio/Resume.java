@@ -8,13 +8,24 @@ import utils.Command;
 public class Resume implements Command {
     @Override
     public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
-        if (args.length!=1)
-            throw new MalformedCommandException();
-        MusicPlayer player =((MusicPlayer) event.getGuild().getAudioManager().getSendingHandler());
-        if (player.isStopped())
-            throw new MalformedCommandException();
-        player.play();
-        event.getTextChannel().sendMessage("Playback was resumed");
+        new Thread(() ->{
+            if (args.length!=1){
+                event.getTextChannel().sendMessage("Invalid Arguments");
+                return;
+            }
+            MusicPlayer player =((MusicPlayer) event.getGuild().getAudioManager().getSendingHandler());
+            if (player.isStopped()){
+                event.getTextChannel().sendMessage("Invalid Arguments");
+                return;
+            }
+            player.play();
+            event.getTextChannel().sendMessage("Playback was resumed");
+        }).run();
+
+    }
+    @Override
+    public String level() {
+        return "Admin";
     }
 
     public String getDescription()

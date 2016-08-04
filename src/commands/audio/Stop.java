@@ -9,18 +9,28 @@ public class Stop implements Command {
 
     @Override
     public void run(MessageReceivedEvent event, String[] args) throws MalformedCommandException {
-        if (event.getGuild().getAudioManager().getSendingHandler()!=null) {
-            MusicPlayer player = (MusicPlayer) event.getGuild().getAudioManager().getSendingHandler();
-            if (player.isPlaying()){
-                player.getAudioQueue().clear();
-                player.stop();
-                event.getGuild().getAudioManager().closeAudioConnection();
-                event.getTextChannel().sendMessage("Successfully cleared the queue, stopped playback, and closed the connection.");
+        new Thread(() ->{
+            if (event.getGuild().getAudioManager().getSendingHandler()!=null) {
+                MusicPlayer player = (MusicPlayer) event.getGuild().getAudioManager().getSendingHandler();
+                if (player.isPlaying()){
+                    player.getAudioQueue().clear();
+                    player.stop();
+                    event.getGuild().getAudioManager().closeAudioConnection();
+                    event.getTextChannel().sendMessage("Successfully cleared the queue, stopped playback, and closed the connection.");
+                }
+                else {
+                    {
+                        event.getTextChannel().sendMessage("Invalid Arguments");
+                        return;
+                    }
+                }
             }
-            else {
-                throw new MalformedCommandException();
-            }
-        }
+        }).run();
+
+    }
+    @Override
+    public String level() {
+        return "Admin";
     }
 
     public String getDescription()

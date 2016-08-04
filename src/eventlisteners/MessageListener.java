@@ -1,12 +1,18 @@
 package eventlisteners;
 
 import exceptions.MalformedCommandException;
+import net.dv8tion.jda.Permission;
+import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
+import org.json.JSONObject;
 import utils.BotLogger;
 import utils.Command;
 import utils.CommandHandler;
 import utils.GuildManager;
+
+import javax.management.relation.RoleStatus;
+import java.util.List;
 
 public class MessageListener extends ListenerAdapter{
     private final CommandHandler commandHandler = new CommandHandler();
@@ -31,14 +37,30 @@ public class MessageListener extends ListenerAdapter{
             return;
         //Gets all possible commands and finds the one that you typed, then runs its main method.
         String[] args = getMessage(event).split(" ");
+        if (!event.getMessage().getContent().equals("**prefix")) {
+            if (!event.getMessage().isPrivate())
+                args[0] = args[0].replace(new JSONObject(GuildManager.getConfig(event.getGuild())).getString("prefix"), "**");
+            else
+                args[0] = args[0].replace(new JSONObject(GuildManager.getConfig(event.getJDA().getGuildById(args[1]))).getString("prefix"), "**");
+        }
         Command cmd = commandHandler.commands.get(args[0]);
-//        if (cmd!=null){
-//           Thread thread = new SandboxThread(event, args);
-//            thread.run();
-//        }
         if (cmd != null) {
             try {
-                cmd.run(event, args);
+                if (cmd.level().equals("Everyone"))
+                    cmd.run(event, args);
+                if (cmd.level().equals("Admin")) {
+                    List<Role> roles = event.getGuild().getRolesForUser(event.getAuthor());
+                    for (Role r :
+                            roles) {
+                        if (r.getPermissions().contains(Permission.ADMINISTRATOR)) {
+                            cmd.run(event, args);
+                            requests++;
+                            return;
+                        }
+                    }
+                    event.getTextChannel().sendMessage("You do not have the required permissions for this command.");
+                }
+
                 requests++;
             } catch (MalformedCommandException e) {
                 BotLogger.log(BotLogger.ERROR, "Malformed " + args[0].substring(2) + " command");

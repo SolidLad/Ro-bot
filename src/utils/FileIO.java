@@ -70,18 +70,4 @@ public class FileIO {
             is.close();
         }
     }
-    public static int getDurationOfMp3(File file) throws UnsupportedAudioFileException, IOException {
-
-        AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
-        if (fileFormat instanceof TAudioFileFormat) {
-            Map<?, ?> properties = ((TAudioFileFormat) fileFormat).properties();
-            String key = "duration";
-            Long microseconds = (Long) properties.get(key);
-            int mili = (int) (microseconds / 1000);
-            return mili;
-        } else {
-            throw new UnsupportedAudioFileException();
-        }
-
-    }
 }

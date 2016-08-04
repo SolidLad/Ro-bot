@@ -22,6 +22,10 @@ public class Join implements Command {
             }
         else throw  new MalformedCommandException();
     }
+    @Override
+    public String level() {
+        return "Admin";
+    }
     public String getDescription()
     {
         return "Debug command";

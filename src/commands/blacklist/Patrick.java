@@ -77,6 +77,10 @@ public class Patrick implements Command {
             }
         }
     }
+    @Override
+    public String level() {
+        return null;
+    }
 
     public String getDescription()
     {

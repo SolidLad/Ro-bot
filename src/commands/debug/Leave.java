@@ -8,6 +8,10 @@ public class Leave implements Command {
     public void run(MessageReceivedEvent event, String[] args) {
         event.getGuild().getAudioManager().closeAudioConnection();
     }
+    @Override
+    public String level() {
+        return "Admin";
+    }
 
     public String getDescription()
     {
