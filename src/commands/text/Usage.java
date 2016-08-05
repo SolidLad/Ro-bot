@@ -35,7 +35,7 @@ public class Usage implements Command {
             //checks for null message and sends if not null
             if (!message.equals(""))
             {
-                event.getTextChannel().sendMessage("`"+message+"`");
+                event.getTextChannel().sendMessage(message);
             }
             //otherwise gives invalid usage command
             else

@@ -3,6 +3,7 @@ package commands.text;
 import exceptions.MalformedCommandException;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,7 +12,10 @@ import utils.GuildManager;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 public class Tag implements Command {
     // TODO: 8/3/2016 needs a rename and possibly a rewrite
@@ -20,6 +24,7 @@ public class Tag implements Command {
         new Thread(()-> {
             Guild g = event.getGuild();
             JSONObject obj = new JSONObject(GuildManager.getConfig(g));
+            List<String> tags = new ArrayList<>();
             if (!args[1].equals("-c") && !args[1].equals("-d")){
                 String str;
                 if (obj.get("tags") instanceof String) {
@@ -27,13 +32,13 @@ public class Tag implements Command {
                 }
                 else {
                     JSONArray arr = obj.getJSONArray("tags");
-                    str = arr.toString();
-                    str = str.substring(1,str.length()-1);
+                    for (Object string : arr) {
+                        tags.add(string.toString());
+                    }
                 }
-                String [] tags = str.split(",");
-                for (String tagset : tags) {
-                    tagset = tagset.substring(1,tagset.length()-1);
-                    String[] tag = tagset.split(":");
+                String[] tagArray = tags.toArray(new String[0]);
+                for (String tagset : tagArray) {
+                    String[] tag = tagset.split(":", 2);
                     if (tag[0].equals(args[1])){
                         event.getTextChannel().sendMessage(tag[1]);
                         return;
@@ -120,6 +125,6 @@ public class Tag implements Command {
     }
     @Override
     public String getDescription() {
-        return "Tags a message for future reuse. Usage: `**tag -c <Name> <Message>` to create a tag, `**tag <Name>` to use a tag or `**tag -d <Name>` to delete a tag.";
+        return "Tags a message for future reuse. Usage: `**tag -c <Name> <Message>` to create a tag, `**tag <Name>` to use a tag or `**tag -d <Name>` to delete a tag. Note: Tag currently only supports the UTF-8 charset.";
     }
 }
