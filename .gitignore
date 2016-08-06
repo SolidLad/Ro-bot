@@ -5,6 +5,8 @@ out
 *.jar
 *.exe
 youtube-dl
+#Ignore resource files
+res
 #Ignore key files
 *.secret
 #Ignore logs & guild information
