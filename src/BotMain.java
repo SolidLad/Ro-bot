@@ -1,6 +1,8 @@
 import eventlisteners.JoinListener;
 import eventlisteners.ReadyListener;
+import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
+import net.dv8tion.jda.managers.AccountManager;
 import utils.CommandHandler;
 import utils.FileIO;
 import eventlisteners.MessageListener;
@@ -14,7 +16,7 @@ public class BotMain {
         token = FileIO.readFile("bot.secret");
         try
         {
-            new JDABuilder()
+            JDA jda = new JDABuilder()
                     .setBotToken(token.replaceAll("\n", ""))
                     .addListener(new ReadyListener())
                     .addListener(new JoinListener())
@@ -22,6 +24,7 @@ public class BotMain {
                     .setBulkDeleteSplittingEnabled(false)
                     .buildBlocking();
             new CommandHandler();
+            jda.getAccountManager().setGame("**help");
         }
         catch (IllegalArgumentException e)
         {
