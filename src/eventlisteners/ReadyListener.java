@@ -36,7 +36,7 @@ public class ReadyListener extends ListenerAdapter {
         obj.put("musicEnabled",true);
         obj.put("recordEnabled",true);
         obj.put("greeting", "Welcome to "+g.getName()+"!");
-        obj.accumulate("tags", "");
+        obj.put("tags", new JSONArray());
         return obj;
     }
 }

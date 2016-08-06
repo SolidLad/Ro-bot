@@ -1,9 +1,9 @@
 package commands.text;
 
 import exceptions.MalformedCommandException;
+import net.dv8tion.jda.MessageBuilder;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,9 +25,9 @@ public class Tag implements Command {
             JSONObject obj = new JSONObject(GuildManager.getConfig(g));
             List<String> tags = new ArrayList<>();
             if (!args[1].equals("-c") && !args[1].equals("-d")){
-                String str;
                 if (obj.get("tags") instanceof String) {
-                    str = (String) obj.get("tags");
+                    String str = (String) obj.get("tags");
+                    tags.add(str);
                 }
                 else {
                     JSONArray arr = obj.getJSONArray("tags");
@@ -40,7 +39,7 @@ public class Tag implements Command {
                 for (String tagset : tagArray) {
                     String[] tag = tagset.split(":", 2);
                     if (tag[0].equals(args[1])){
-                        event.getTextChannel().sendMessage(tag[1]);
+                        event.getTextChannel().sendMessage(new MessageBuilder().appendString(tag[1]).build());
                         return;
                     }
                 }
@@ -119,12 +118,16 @@ public class Tag implements Command {
                     finalString += args[i] + " ";
                 else finalString += args[i];
             }
+            if (finalString.contains("\\n"))
+                finalString = finalString.replace("\\n","\n");
             return finalString;
         }
         return null;
     }
     @Override
     public String getDescription() {
-        return "Tags a message for future reuse. Usage: `**tag -c <Name> <Message>` to create a tag, `**tag <Name>` to use a tag or `**tag -d <Name>` to delete a tag. Note: Tag currently only supports the UTF-8 charset.";
+        return "Tags a message for future use. Usage: `**tag -c <Name> <Message>` to create a tag, `**tag <Name>` to use a tag or `**tag -d <Name>` to delete a tag. Type \\n to " +
+                "insert a newline. Note that new lines begin immediately. For example \"new\\nline\" = \"new\nline\".  " +
+                "Additionally note that tag currently only supports the UTF-8 charset.";
     }
 }

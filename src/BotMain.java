@@ -1,6 +1,7 @@
 import eventlisteners.JoinListener;
 import eventlisteners.ReadyListener;
 import net.dv8tion.jda.JDABuilder;
+import utils.CommandHandler;
 import utils.FileIO;
 import eventlisteners.MessageListener;
 
@@ -20,6 +21,7 @@ public class BotMain {
                     .addListener(new MessageListener())
                     .setBulkDeleteSplittingEnabled(false)
                     .buildBlocking();
+            new CommandHandler();
         }
         catch (IllegalArgumentException e)
         {

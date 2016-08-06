@@ -1,6 +1,7 @@
 package commands.admin;
 
 import exceptions.MalformedCommandException;
+import net.dv8tion.jda.MessageHistory;
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import utils.Command;
@@ -19,12 +20,13 @@ public class ClearChannel implements Command
                 event.getTextChannel().sendMessage("Malformed command.");
             }
             else {
+                MessageHistory hist = event.getTextChannel().getHistory();
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
                         if (!cleared(event))
-                            event.getTextChannel().deleteMessages(event.getTextChannel().getHistory().retrieve(100));
+                            event.getTextChannel().deleteMessages(hist.retrieve(100));
                         else timer.cancel();
                     }
                 };

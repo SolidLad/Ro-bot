@@ -15,9 +15,7 @@ import javax.management.relation.RoleStatus;
 import java.util.List;
 
 public class MessageListener extends ListenerAdapter{
-    private final CommandHandler commandHandler = new CommandHandler();
     private final GuildManager guildManager = new GuildManager();
-    public static long requests = 0;
 
     private String getMessage(MessageReceivedEvent event) {
         return event.getMessage().getContent();
@@ -43,7 +41,7 @@ public class MessageListener extends ListenerAdapter{
             else
                 args[0] = args[0].replace(new JSONObject(GuildManager.getConfig(event.getJDA().getGuildById(args[1]))).getString("prefix"), "**");
         }
-        Command cmd = commandHandler.commands.get(args[0]);
+        Command cmd = CommandHandler.commands.get(args[0]);
         if (cmd != null) {
             try {
                 if (cmd.level().equals("Everyone"))
@@ -54,14 +52,12 @@ public class MessageListener extends ListenerAdapter{
                             roles) {
                         if (r.getPermissions().contains(Permission.ADMINISTRATOR)) {
                             cmd.run(event, args);
-                            requests++;
                             return;
                         }
                     }
                     event.getTextChannel().sendMessage("You do not have the required permissions for this command.");
                 }
 
-                requests++;
             } catch (MalformedCommandException e) {
                 BotLogger.log(BotLogger.ERROR, "Malformed " + args[0].substring(2) + " command");
             }

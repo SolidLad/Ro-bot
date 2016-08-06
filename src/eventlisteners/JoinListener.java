@@ -4,6 +4,7 @@ import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class JoinListener extends ListenerAdapter {
         obj.put("musicEnabled",true);
         obj.put("recordEnabled",true);
         obj.put("greeting", "Welcome to "+g.getName()+"!");
-        obj.accumulate("tags", "");
+        obj.put("tags", new JSONArray());
         return obj;
     }
 }
