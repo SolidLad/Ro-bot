@@ -1,4 +1,4 @@
-package commands.audio;
+package commands.blacklist;
 import org.json.JSONObject;
 import utils.Command;
 import net.dv8tion.jda.audio.AudioReceiveHandler;

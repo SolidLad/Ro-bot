@@ -1,4 +1,4 @@
-package commands.text;
+package commands.blacklist;
 import exceptions.MalformedCommandException;
 import utils.Command;
 import utils.CommandHandler;

@@ -17,7 +17,7 @@ public class Stats implements Command{
             String msg = "```js\nUptime: "+(((System.currentTimeMillis()-startTime)/1000)/60) +" minute(s).\n" +
                     "Guilds: "+event.getJDA().getGuilds().size()+"\n" +
                     "Users: "+event.getJDA().getUsers().size()+"\n" +
-                    "Developer: "+event.getJDA().getUserById("190652042493165568").getUsername()+"\n" +
+                    "Developer: "+event.getJDA().getUserById("190652042493165568").getUsername()+"#8917"+"\n" +
                     "Total requests: "+ event.getJDA().getResponseTotal()+"\n" +
                     "Threads: "+ ManagementFactory.getThreadMXBean().getThreadCount()+"```";
             event.getChannel().sendMessage(msg);

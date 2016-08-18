@@ -6,6 +6,7 @@ import net.dv8tion.jda.managers.AudioManager;
 import net.dv8tion.jda.managers.GuildManager;
 import net.dv8tion.jda.player.MusicPlayer;
 import net.dv8tion.jda.player.source.AudioSource;
+import net.dv8tion.jda.player.source.AudioTimestamp;
 import net.dv8tion.jda.player.source.RemoteSource;
 import org.json.JSONObject;
 import utils.Command;
@@ -76,12 +77,17 @@ public class Play implements Command {
                 listener = new PlayerEventListener(event.getGuild(), event.getTextChannel());
                 player.addEventListener(listener);
             }
-
-            if (source != null && source.getInfo().getDuration().getMinutes() < 16) {
-                player.getAudioQueue().add(source);
+            String duration = null;
+            try {
+                 duration = source.getInfo().getDuration().getTimestamp();
+            }
+            catch (NullPointerException e){
+                e.printStackTrace();
+            }
+            player.getAudioQueue().add(source);
+            if (duration!=null)
                 event.getTextChannel().sendMessage(source.getInfo().getTitle() + " was added to the queue. Length `" + source.getInfo().getDuration().getTimestamp() + "`");
-            } else
-                event.getTextChannel().sendMessage("Invalid source. Either the video was longer than 15 minutes or the URL was invalid.");
+            else event.getTextChannel().sendMessage("Error retrieving duration and title. Attempting to play video.");
 
 
             if (!event.getGuild().getAudioManager().isConnected() && event.getGuild().getAudioManager().getQueuedAudioConnection() == null)
